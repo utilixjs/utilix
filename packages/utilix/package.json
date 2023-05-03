@@ -4,7 +4,7 @@
 	"type": "module",
 	"license": "MIT",
 	"author": "Waleed Khaled <https://github.com/Waleed-KH>",
-	"description": "",
+	"description": "A modern and flexible utilities library for JavaScript",
 	"keywords": ["utils", "utilities"],
 	"scripts": {
 		"dev": "vite",
@@ -12,9 +12,11 @@
 		"build:tsup": "tsc && tsup",
 		"preview": "vite preview"
 	},
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"unpkg": "dist/index.global.js",
+	"jsdelivr": "dist/index.global.js",
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
@@ -26,6 +28,13 @@
 	"files": [
 		"dist"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/utilixjs/utilix.git"
+	},
+	"bugs": {
+		"url": "https://github.com/utilixjs/utilix/issues"
+	},
 	"devDependencies": {
 		"tsup": "^6.7.0",
 		"typescript": "^5.0.4",
