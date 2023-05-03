@@ -1,0 +1,17 @@
+{
+	"name": "@utilix/monorepo",
+	"version": "0.0.0",
+	"private": true,
+	"packageManager": "pnpm@8.2.0",
+	"type": "module",
+	"scripts": {},
+	"keywords": [],
+	"devDependencies": {
+		"@tsconfig/node18": "^2.0.0",
+		"@types/node": "18.16.3",
+		"typescript": "^5.0.4",
+		"vite": "^4.3.3"
+	},
+	"author": "",
+	"license": "MIT"
+}

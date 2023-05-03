@@ -1,0 +1,35 @@
+{
+	"name": "utilix",
+	"version": "0.1.0",
+	"type": "module",
+	"license": "MIT",
+	"author": "Waleed Khaled <https://github.com/Waleed-KH>",
+	"description": "",
+	"keywords": ["utils", "utilities"],
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"build:tsup": "tsc && tsup",
+		"preview": "vite preview"
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.cjs"
+		},
+		"./*": "./dist/*"
+	},
+	"files": [
+		"dist"
+	],
+	"devDependencies": {
+		"tsup": "^6.7.0",
+		"typescript": "^5.0.4",
+		"vite": "^4.3.3",
+		"vite-plugin-dts": "^2.3.0"
+	}
+}
