@@ -5,12 +5,13 @@
 	"license": "MIT",
 	"author": "Waleed Khaled <https://github.com/Waleed-KH>",
 	"description": "A modern and flexible utilities library for JavaScript",
-	"keywords": ["utils", "utilities"],
+	"keywords": [
+		"utils",
+		"utilities"
+	],
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build:tsup": "tsc && tsup",
-		"preview": "vite preview"
+		"build": "tsc && pnpm build:rollup",
+		"build:rollup": "rollup --config rollup.config.ts --configPlugin esbuild"
 	},
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
@@ -35,9 +36,12 @@
 		"url": "https://github.com/utilixjs/utilix/issues"
 	},
 	"devDependencies": {
-		"tsup": "^6.7.0",
-		"typescript": "^5.0.4",
-		"vite": "^4.3.3",
-		"vite-plugin-dts": "^2.3.0"
+		"@types/fs-extra": "^11.0.1",
+		"esbuild": "^0.17.18",
+		"fs-extra": "^11.1.1",
+		"rollup": "^3.21.5",
+		"rollup-plugin-dts": "^5.3.0",
+		"rollup-plugin-esbuild": "^5.0.0",
+		"typescript": "^5.0.4"
 	}
 }

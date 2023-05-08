@@ -5,6 +5,7 @@
 	"packageManager": "pnpm@8.2.0",
 	"type": "module",
 	"scripts": {
+		"build": "pnpm -r run build",
 		"test": "vitest"
 	},
 	"keywords": [],
@@ -12,7 +13,7 @@
 		"@tsconfig/node18": "^2.0.0",
 		"@types/node": "18.16.3",
 		"typescript": "^5.0.4",
-		"vite": "^4.3.3",
+		"vite": "^4.3.5",
 		"vitest": "^0.31.0"
 	},
 	"author": "",
