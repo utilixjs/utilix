@@ -36,6 +36,7 @@ describe('isArrayLike', () => {
 		expect(isArrayLike(1)).toBeFalsy();
 		expect(isArrayLike(null)).toBeFalsy();
 		expect(isArrayLike(true)).toBeFalsy();
+		expect(isArrayLike({ 'a': 1 })).toBeFalsy();
 		expect(isArrayLike(new Set())).toBeFalsy();
 		expect(isArrayLike(new Date())).toBeFalsy();
 		expect(isArrayLike(new Error())).toBeFalsy();
