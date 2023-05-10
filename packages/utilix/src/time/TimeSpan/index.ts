@@ -1,12 +1,13 @@
 import { isFunction } from "../../basics/isFunction";
 
-const msSecond = 1000
-const secMinute = 60
-const minHour = 60
-const hrDay = 24
-const msMinute = msSecond * secMinute // 60,000
-const msHour = msMinute * minHour // 3,600,000
-const msDay = msHour * hrDay // 86,400,000
+const
+	msSecond = 1000,
+	secMinute = 60,
+	minHour = 60,
+	hrDay = 24,
+	msMinute = msSecond * secMinute, // 60,000
+	msHour = msMinute * minHour, // 3,600,000
+	msDay = msHour * hrDay; // 86,400,000
 
 export class TimeSpan {
 	constructor(private readonly ms: number | (() => number)) {
