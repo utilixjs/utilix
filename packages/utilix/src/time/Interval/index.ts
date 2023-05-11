@@ -1,3 +1,4 @@
+import type { Action } from "../../types";
 import { isNumber } from "../../basics/isNumber";
 
 export interface IntervalOptions {
@@ -6,18 +7,18 @@ export interface IntervalOptions {
 }
 
 export class Interval<TArgs extends any[]> {
-	private readonly _cb: (...args: TArgs) => void;
+	private readonly _cb: Action<TArgs>;
 	private readonly _delay?: number;
 	private readonly _args: TArgs;
 
 	private _intervalId: ReturnType<typeof setInterval> | null = null;
 	private _isActive: boolean = false;
 
-	constructor(callback: () => void, delay?: number);
-	constructor(callback: () => void, options?: IntervalOptions);
-	constructor(callback: (...args: TArgs) => void, delay?: number, ...args: TArgs);
-	constructor(callback: (...args: TArgs) => void, options?: IntervalOptions, ...args: TArgs);
-	constructor(callback: (...args: TArgs) => void, options: number | IntervalOptions = {}, ...args: TArgs) {
+	constructor(callback: Action, delay?: number);
+	constructor(callback: Action, options?: IntervalOptions);
+	constructor(callback: Action<TArgs>, delay?: number, ...args: TArgs);
+	constructor(callback: Action<TArgs>, options?: IntervalOptions, ...args: TArgs);
+	constructor(callback: Action<TArgs>, options: number | IntervalOptions = {}, ...args: TArgs) {
 		this._args = args;
 		this._cb = callback;
 
