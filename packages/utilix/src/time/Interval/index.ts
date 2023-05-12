@@ -1,12 +1,20 @@
 import type { Action } from "../../types";
 import { isNumber } from "../../basics/isNumber";
 
+export interface IInterval {
+	readonly delay?: number;
+	readonly isActive: boolean;
+
+	pause(): void;
+	resume(): void;
+}
+
 export interface IntervalOptions {
 	delay?: number;
 	immediate?: boolean;
 }
 
-export class Interval<TArgs extends any[]> {
+export class Interval<TArgs extends any[] = []> implements IInterval {
 	private readonly _cb: Action<TArgs>;
 	private readonly _delay?: number;
 	private readonly _args: TArgs;
@@ -25,19 +33,17 @@ export class Interval<TArgs extends any[]> {
 		if (isNumber(options))
 			options = { delay: options };
 
-		const {
-			delay,
-			immediate = true
-		} = options;
-
-		this._delay = delay;
-
-		if (immediate)
+		this._delay = options.delay;
+		if (options.immediate ?? true)
 			this.resume();
 	}
 
 	get isActive() {
 		return this._isActive;
+	}
+
+	get delay() {
+		return this._delay;
 	}
 
 	private clean() {
