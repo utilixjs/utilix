@@ -25,7 +25,7 @@ export class Interval<TArgs extends any[] = []> implements IInterval {
 	constructor(callback: Action, delay?: number);
 	constructor(callback: Action, options?: IntervalOptions);
 	constructor(callback: Action<TArgs>, delay?: number, ...args: TArgs);
-	constructor(callback: Action<TArgs>, options?: IntervalOptions, ...args: TArgs);
+	constructor(callback: Action<TArgs>, options?: number | IntervalOptions, ...args: TArgs);
 	constructor(callback: Action<TArgs>, options: number | IntervalOptions = {}, ...args: TArgs) {
 		this._args = args;
 		this._cb = callback;
