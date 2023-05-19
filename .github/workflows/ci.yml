@@ -38,11 +38,11 @@ jobs:
       - name: Install dependencies
         run: pnpm -r install
 
-      - name: Build
-        run: pnpm build
-
       - name: Typecheck
         run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
 
       - name: Test
         run: pnpm test run
