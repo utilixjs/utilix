@@ -2,8 +2,9 @@ name: Publish NPM Package
 
 on: 
   workflow_dispatch:
-  release:
-    types: [published]
+  push:
+    tags:
+      - v*
 
 jobs:
   publish-npm:
@@ -37,3 +38,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
+
+      - run: npx changelogithub
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
