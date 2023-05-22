@@ -12,8 +12,11 @@ export interface UCategory extends UModule {
 	readonly modules: readonly UModule[];
 }
 
-export const srcDir = fileURLToPath(new URL('../src', import.meta.url));
-console.log(srcDir);
+export const rootDir = fileURLToPath(new URL('../', import.meta.url));
+export const srcDir = path.join(rootDir, 'src/');
+
+console.log('root:', rootDir);
+console.log('src:', srcDir);
 
 function mapModules<T>(dir: string, mapper: (c: T, m: string, d: string) => void, cls: T) {
 	return fs.readdirSync(dir, { withFileTypes: true }).reduce((c, m) => {
