@@ -1,4 +1,4 @@
-import type { Func, Action } from "../../types";
+import type { Func, Action } from "@/types";
 import { IInterval, Interval, IntervalOptions } from "../Interval";
 
 export type ElapseState = 'inactive' | 'active' | 'paused';

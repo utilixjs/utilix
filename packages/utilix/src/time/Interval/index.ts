@@ -1,5 +1,5 @@
-import type { Action } from "../../types";
-import { isNumber } from "../../basics/isNumber";
+import type { Action } from "@/types";
+import { isNumber } from "@/basics/isNumber";
 
 export interface IInterval {
 	readonly delay?: number;

@@ -3,6 +3,7 @@ import { emptyDirSync } from "fs-extra";
 import { rollup, type RollupOptions, type RollupBuild } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
+import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 import { mainModule, rootDir } from "./modules";
 import { updateImports } from "./updateImports";
 
@@ -26,6 +27,7 @@ const esbuildPlugin = esbuild({
 	target: 'es2017',
 	minify: true
 });
+const tsconfigPathsPlugin = tsconfigPaths();
 
 async function build(options: RollupOptions) {
 	let bundle: RollupBuild | undefined;
@@ -57,7 +59,7 @@ console.info("⚙️  Bundling ESM & CJS modules");
 
 await build({
 	input: moduleInputs,
-	plugins: [esbuildPlugin],
+	plugins: [tsconfigPathsPlugin, esbuildPlugin],
 	output: [
 		{
 			dir: distDir,
@@ -76,7 +78,7 @@ console.info("⚙️  Bundling TS type definitions");
 
 await build({
 	input: moduleInputs,
-	plugins: [dts()],
+	plugins: [tsconfigPathsPlugin, dts()],
 	output: {
 		dir: distDir,
 		entryFileNames: `[name].d.ts`,
@@ -89,7 +91,7 @@ console.info("⚙️  Bundling IIFE globals");
 function getIIFEConfig(input: string, outputFile: string): RollupOptions {
 	return {
 		input: input,
-		plugins: [esbuildPlugin],
+		plugins: [tsconfigPathsPlugin, esbuildPlugin],
 		output: {
 			file: path.join(distDir, `${outputFile}.global.js`),
 			format: 'iife',
