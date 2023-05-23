@@ -3,3 +3,5 @@ export type PartiallyOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<
 
 export type Func<TResult = void, TArgs extends any[] = []> = (...args: TArgs) => TResult;
 export type Action<TArgs extends any[] = []> = Func<void, TArgs>;
+
+export type ValueOrGetter<T> = T | Func<T>;
