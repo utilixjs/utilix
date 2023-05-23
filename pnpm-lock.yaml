@@ -43,6 +43,9 @@ importers:
       rollup-plugin-esbuild:
         specifier: ^5.0.0
         version: 5.0.0(esbuild@0.17.19)(rollup@3.22.0)
+      rollup-plugin-tsconfig-paths:
+        specifier: ^1.5.0
+        version: 1.5.0(rollup@3.22.0)(typescript@5.0.4)
       tsx:
         specifier: ^3.12.7
         version: 3.12.7
@@ -1249,6 +1252,17 @@ packages:
       - supports-color
     dev: true
 
+  /rollup-plugin-tsconfig-paths@1.5.0(rollup@3.22.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-b460afESVscekQAVFvRhHGsmti9vDd2wp1PirKBuVrkC0OgqbhPfKlAEDOcn6PUPYW73vwuEnMu76kCiFOzZaw==}
+    peerDependencies:
+      rollup: ^2 || ^3
+    dependencies:
+      rollup: 3.22.0
+      typescript-paths: 1.5.0(typescript@5.0.4)
+    transitivePeerDependencies:
+      - typescript
+    dev: true
+
   /rollup@3.22.0:
     resolution: {integrity: sha512-imsigcWor5Y/dC0rz2q0bBt9PabcL3TORry2hAa6O6BuMvY71bqHyfReAz5qyAqiQATD1m70qdntqBfBQjVWpQ==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -1407,6 +1421,14 @@ packages:
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
+    dev: true
+
+  /typescript-paths@1.5.0(typescript@5.0.4):
+    resolution: {integrity: sha512-t6AEWi3g4wW2N/Ui8NpKjfpZ8EcJnGAs64uux54N8zMAZaz8ldjb0GCLIyo9panMUzKsxz+ePt4BGk+ssBGNFw==}
+    peerDependencies:
+      typescript: ^4.7.2 || ^5
+    dependencies:
+      typescript: 5.0.4
     dev: true
 
   /typescript@5.0.4:
