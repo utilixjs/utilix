@@ -1,11 +1,14 @@
 {
 	"extends": "@tsconfig/node18/tsconfig.json",
-	"include": [
-		"vite.config.*",
-		"rollup.config.*"
-	],
 	"compilerOptions": {
-		"composite": true,
-		"types": [ "node" ]
-	}
+		"module": "ESNext",
+		"types": [ "node" ],
+		"noEmit": true
+	},
+	"include": [
+		"changelogithub.config.ts",
+		"vitest.workspace.ts",
+		"scripts",
+		"packages/*/scripts"
+	]
 }
