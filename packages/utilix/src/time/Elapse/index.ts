@@ -1,3 +1,4 @@
+import { noop } from "@/utils";
 import type { Func, Action } from "@/types";
 import { IInterval, Interval, IntervalOptions } from "../Interval";
 
@@ -23,7 +24,7 @@ export class Elapse {
 		const cb = options.onTick;
 		this._interval = new Interval(cb ? () => {
 			cb(this.time);
-		} : () => { }, options.interval);
+		} : noop, options.interval);
 	}
 
 	get state(): ElapseState {

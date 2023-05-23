@@ -1,4 +1,4 @@
-import { isFunction } from "../../basics/isFunction";
+import { toValue } from "@/utils/toValue";
 
 const
 	msSecond = 1000,
@@ -14,7 +14,7 @@ export class TimeSpan {
 	}
 
 	get totalMilliseconds() {
-		return isFunction(this.ms) ? this.ms() : this.ms;
+		return toValue(this.ms);
 	}
 
 	get totalSeconds() {
