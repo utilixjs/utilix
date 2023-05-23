@@ -1,3 +1,4 @@
+import type { ValueOrGetter } from "@/types";
 import { toValue } from "@/utils/toValue";
 
 const
@@ -10,7 +11,7 @@ const
 	msDay = msHour * hrDay; // 86,400,000
 
 export class TimeSpan {
-	constructor(private readonly ms: number | (() => number)) {
+	constructor(private readonly ms: ValueOrGetter<number>) {
 	}
 
 	get totalMilliseconds() {
