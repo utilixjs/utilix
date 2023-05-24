@@ -17,7 +17,13 @@ module.exports = {
 		"semi": ["error", "always"],
 
 		"@typescript-eslint/array-type": "warn",
-		"@typescript-eslint/ban-ts-comment": "warn",
+		"@typescript-eslint/ban-ts-comment": ["warn", {
+			"ts-expect-error": "allow-with-description",
+			"ts-ignore": "allow-with-description",
+			"ts-nocheck": true,
+			"ts-check": false,
+			minimumDescriptionLength: 3
+		}],
 		"@typescript-eslint/ban-types": ["error", {
 			types: {
 				"Function": false
