@@ -7,13 +7,18 @@
 	"scripts": {
 		"build": "pnpm -r run build",
 		"test": "vitest",
-		"typecheck": "tsc --noEmit --project tsconfig.node.json"
+		"typecheck": "tsc --noEmit --project tsconfig.node.json",
+		"lint": "eslint --cache .",
+		"lint:fix": "pnpm lint --fix"
 	},
 	"keywords": [],
 	"devDependencies": {
 		"@tsconfig/node18": "^2.0.1",
 		"@types/node": "18.16.14",
+		"@typescript-eslint/eslint-plugin": "^5.59.7",
+		"@typescript-eslint/parser": "^5.59.7",
 		"changelogithub": "^0.12.11",
+		"eslint": "^8.41.0",
 		"typescript": "^5.0.4",
 		"vite": "^4.3.8",
 		"vitest": "^0.31.1"

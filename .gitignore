@@ -12,4 +12,5 @@ node_modules
 dist
 dist-ssr
 coverage
+.eslintcache
 *.local

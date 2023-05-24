@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { isArray, isArrayLike } from './';
 
+// eslint-disable-next-line prefer-rest-params
 const args = (function (..._: any[]) { return arguments; }).apply(null, [1, 2]);
 
 describe('isArray', () => {

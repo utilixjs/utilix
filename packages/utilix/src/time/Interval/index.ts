@@ -20,7 +20,7 @@ export class Interval<TArgs extends any[] = []> implements IInterval {
 	private readonly _args: TArgs;
 
 	private _intervalId: ReturnType<typeof setInterval> | null = null;
-	private _isActive: boolean = false;
+	private _isActive = false;
 
 	constructor(callback: Action, delay?: number);
 	constructor(callback: Action, options?: IntervalOptions);

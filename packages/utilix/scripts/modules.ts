@@ -47,7 +47,7 @@ export const modules: readonly UCategory[] = mapModules<UCategory[]>(srcDir, (ct
 				name: mname,
 				index: mindex,
 				dir: mdir
-			})
+			});
 		}, [])
 	});
 	console.log();

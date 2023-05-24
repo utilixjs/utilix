@@ -15,7 +15,7 @@ async function updateImport(ct: UCategory) {
 		imports.push(`export * from './types';`);
 	}
 
-	return fs.writeFile(ct.index, `${imports.join(NLINE)}${NLINE}`)
+	return fs.writeFile(ct.index, `${imports.join(NLINE)}${NLINE}`);
 }
 
 export async function updateImports() {
