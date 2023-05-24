@@ -1,6 +1,8 @@
 import { defineConfig } from "changelogithub";
 
 export default defineConfig({
+	group: 'multiple',
+	// @ts-ignore
 	types: {
 		feat: { title: '🚀 Features' },
 		fix: { title: '🐞 Bug Fixes' },
@@ -11,4 +13,4 @@ export default defineConfig({
 		build: { title: '📦 Build' },
 		ci: { title: '🤖 CI' }
 	}
-} as any);
+});

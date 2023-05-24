@@ -1,6 +1,6 @@
 name: Publish NPM Package
 
-on: 
+on:
   workflow_dispatch:
   push:
     tags:
@@ -40,7 +40,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
 
-      - run: npx changelogithub
+      - name: Generate changelog and release on GitHub
+        run: npx changelogithub
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
