@@ -3,7 +3,6 @@ import { emptyDirSync } from "fs-extra";
 import { rollup, type RollupOptions, type RollupBuild } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
-// @ts-ignore
 import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 import { mainModule, rootDir } from "./modules";
 import { updateImports } from "./updateImports";

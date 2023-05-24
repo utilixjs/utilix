@@ -1,3 +1,4 @@
+export * from './compare';
 export * from './isArray';
 export * from './isBoolean';
 export * from './isFunction';
