@@ -1,4 +1,4 @@
-import { toTypeString } from "../../.internal/toTypeString";
+import { toTypeString } from "@/.internal/toTypeString";
 
 export function isObject(value?: any): value is object {
 	return typeof value === 'object' && value !== null;
