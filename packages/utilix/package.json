@@ -10,9 +10,10 @@
 		"utilities"
 	],
 	"scripts": {
-		"build": "tsc && tsx ./scripts/build.ts",
+		"build": "pnpm typecheck && tsx ./scripts/build.ts",
 		"build:rollup": "rollup --config rollup.config.ts --configPlugin esbuild",
-		"update": "tsx ./scripts/update.ts"
+		"update": "tsx ./scripts/update.ts",
+		"typecheck": "tsc --noEmit"
 	},
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",

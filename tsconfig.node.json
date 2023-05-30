@@ -2,7 +2,7 @@
 	"extends": "@tsconfig/node18/tsconfig.json",
 	"compilerOptions": {
 		"module": "ESNext",
-		"types": [ "node" ],
+		"types": ["node"],
 		"noEmit": true
 	},
 	"include": [
