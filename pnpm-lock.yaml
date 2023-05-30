@@ -7,6 +7,9 @@ importers:
       '@tsconfig/node18':
         specifier: ^2.0.1
         version: 2.0.1
+      '@types/eslint':
+        specifier: ^8.40.0
+        version: 8.40.0
       '@types/node':
         specifier: 18.16.14
         version: 18.16.14
@@ -421,6 +424,13 @@ packages:
 
   /@types/chai@4.3.5:
     resolution: {integrity: sha512-mEo1sAde+UCE6b2hxn332f1g1E8WfYRu6p5SvTKr2ZKC1f7gFJXk4h5PyGP9Dt6gCaG8y8XhwnXWC6Iy2cmBng==}
+    dev: true
+
+  /@types/eslint@8.40.0:
+    resolution: {integrity: sha512-nbq2mvc/tBrK9zQQuItvjJl++GTN5j06DaPtp3hZCpngmG6Q3xoyEmd0TwZI0gAy/G1X0zhGBbr2imsGFdFV0g==}
+    dependencies:
+      '@types/estree': 1.0.1
+      '@types/json-schema': 7.0.11
     dev: true
 
   /@types/estree@1.0.1:
