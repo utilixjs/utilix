@@ -1,3 +1,3 @@
-export function isFunction<T extends Function>(value?: any): value is T {
+export function isFunction<T extends Function>(value?: unknown): value is T {
 	return typeof value === 'function';
 }
