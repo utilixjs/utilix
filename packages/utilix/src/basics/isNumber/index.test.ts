@@ -1,58 +1,81 @@
-import { describe, it, expect, type Assertion } from 'vitest';
-import { isNumber, isNumberObject } from './';
+import { describe, it, expect } from 'vitest';
+import { isNumber, isNumberObject, isNumeric } from './';
 
-function primitiveCheck(func: (val: any) => boolean) {
-	expect(func(0)).toBeTruthy();
-	expect(func(123)).toBeTruthy();
-	expect(func(NaN)).toBeTruthy();
-	expect(func(Infinity)).toBeTruthy();
-	expect(func(Number(0.2))).toBeTruthy();
-	expect(func(Number(Math.PI))).toBeTruthy();
-}
+const Num = [0, 123, 0xff, -5e3, Number('0.2'), Math.PI];
+const NumObj = [Object(0), Object(-45), new Number(NaN), new Number(0.2)];
+const NumNonFinite = [NaN, Infinity, -Infinity];
+const NumStr = ['0', '-0.1', '012', '0xff', '5e3', '  56\r\n '];
+const NonNum = ['x', null, true, [1, 2, 3], { 'a': 1 }, Symbol(), new Date(), new Error(), /x/];
 
-function objectCheck(func: (val: any) => boolean, tobe: (assert: Assertion<boolean>) => void) {
-	tobe(expect(func(Object(0))));
-	tobe(expect(func(Object(45))));
-	tobe(expect(func(new Number(NaN))));
-	tobe(expect(func(new Number(false))));
-}
-
-function nonNumCheck(func: (val: any) => boolean) {
-	expect(func('x')).toBeFalsy();
-	expect(func(null)).toBeFalsy();
-	expect(func(true)).toBeFalsy();
-	expect(func([1, 2, 3])).toBeFalsy();
-	expect(func({ 'a': 1 })).toBeFalsy();
-	expect(func(Symbol())).toBeFalsy();
-	expect(func(new Date())).toBeFalsy();
-	expect(func(new Error())).toBeFalsy();
-	expect(func(/x/)).toBeFalsy();
+function expectAll(values: any[], checker: (val: any) => boolean, truthy: boolean) {
+	values.forEach(val => {
+		const assert = expect(checker(val));
+		truthy ? assert.toBeTruthy(): assert.toBeFalsy();
+	});
 }
 
 describe('isNumber', () => {
 	it('should return `true` for primitive numbers', () => {
-		primitiveCheck(isNumber);
+		expectAll(Num, isNumber, true);
+	});
+
+	it('should return `true` for non-finite numbers', () => {
+		expectAll(NumNonFinite, isNumber, true);
 	});
 
 	it('should return `false` for object numbers', () => {
-		objectCheck(isNumber, (assert) => assert.toBeFalsy());
+		expectAll(NumObj, isNumber, false);
+	});
+
+	it('should return `false` for string numbers', () => {
+		expectAll(NumStr, isNumber, false);
 	});
 
 	it('should return `false` for non-numbers', () => {
-		nonNumCheck(isNumber);
+		expectAll(NonNum, isNumber, false);
 	});
 });
 
 describe('isNumberObject', () => {
 	it('should return `true` for primitive numbers', () => {
-		primitiveCheck(isNumberObject);
+		expectAll(Num, isNumberObject, true);
+	});
+
+	it('should return `true` for non-finite numbers', () => {
+		expectAll(NumNonFinite, isNumberObject, true);
 	});
 
 	it('should return `true` for object numbers', () => {
-		objectCheck(isNumberObject, (assert) => assert.toBeTruthy());
+		expectAll(NumObj, isNumberObject, true);
+	});
+
+	it('should return `false` for string numbers', () => {
+		expectAll(NumStr, isNumberObject, false);
 	});
 
 	it('should return `false` for non-numbers', () => {
-		nonNumCheck(isNumberObject);
+		expectAll(NonNum, isNumberObject, false);
+	});
+});
+
+describe('isNumeric', () => {
+	it('should return `true` for primitive numbers', () => {
+		expectAll(Num, isNumeric, true);
+	});
+
+	it('should return `false` for non-finite numbers', () => {
+		expectAll(NumNonFinite, isNumeric, false);
+	});
+
+	it('should return `false` for object numbers', () => {
+		expectAll(NumObj, isNumeric, false);
+	});
+
+	it('should return `true` for string numbers', () => {
+		expectAll(NumStr, isNumeric, true);
+	});
+
+	it('should return `false` for non-numbers', () => {
+		expectAll(NonNum, isNumeric, false);
 	});
 });
