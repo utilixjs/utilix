@@ -5,9 +5,13 @@ module.exports = {
 	plugins: ['@typescript-eslint'],
 	extends: [
 		'eslint:recommended',
-		'plugin:@typescript-eslint/eslint-recommended',
-		'plugin:@typescript-eslint/recommended'
+		'plugin:@typescript-eslint/recommended-type-checked',
+		'plugin:@typescript-eslint/stylistic-type-checked',
 	],
+	parserOptions: {
+		project: ['./tsconfig.node.json', './packages/*/tsconfig.json'],
+		tsconfigRootDir: __dirname,
+	},
 	env: {
 		es2021: true,
 		node: true

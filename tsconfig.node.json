@@ -10,6 +10,7 @@
 		"changelogithub.config.ts",
 		"vitest.workspace.ts",
 		"scripts",
-		"packages/*/scripts"
+		"packages/*/scripts",
+		"packages/*/*.config.ts",
 	]
 }
