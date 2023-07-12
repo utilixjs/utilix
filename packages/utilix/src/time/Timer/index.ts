@@ -24,7 +24,7 @@ export class Timer {
 		this._elapse = new Elapse({ ...options, onTick: (cb ? () => {
 			this.update();
 			cb(this.time);
-		} : this.update) });
+		} : () => this.update()) });
 	}
 
 	get initTime() {

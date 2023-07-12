@@ -6,5 +6,6 @@ function isLength(value?: unknown) {
 }
 
 export function isArrayLike(value?: unknown): value is ArrayLike<unknown> {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return value != null && typeof value !== 'function' && isLength((value as any).length);
 }

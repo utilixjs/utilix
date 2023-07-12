@@ -5,6 +5,7 @@ describe('isFunction', () => {
 	it('should return `true` for functions', () => {
 		expect(isFunction(() => {})).toBeTruthy();
 		expect(isFunction(isFunction)).toBeTruthy();
+		// eslint-disable-next-line @typescript-eslint/unbound-method
 		expect(isFunction("".slice)).toBeTruthy();
 	});
 
