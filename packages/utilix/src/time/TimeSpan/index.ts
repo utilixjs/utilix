@@ -10,7 +10,11 @@ const
 	msHour = msMinute * minHour, // 3,600,000
 	msDay = msHour * hrDay; // 86,400,000
 
+const DEFAULT_FORMAT = '-[d\\.]hh:mm:ss[\\.fff]';
+
 export class TimeSpan {
+	private _defaultFormat = DEFAULT_FORMAT;
+
 	constructor(private readonly ms: ValueOrGetter<number>) {
 	}
 
@@ -55,25 +59,61 @@ export class TimeSpan {
 	}
 
 	get formatted() {
-		let str = '';
-		const isNegative = (this.totalMilliseconds < 0),
-			d = Math.abs(this.days),
-			h = Math.abs(this.hours),
-			m = Math.abs(this.minutes),
-			s = Math.abs(this.seconds),
-			f = Math.abs(this.milliseconds);
-
-		if (isNegative)
-			str += '-';
-		if (d)
-			str += `${d.toString().padStart(2, '0')}.`;
-		if (h || d)
-			str += `${h.toString().padStart(2, '0')}:`;
-		str += `${m.toString().padStart(2, '0')}:`;
-		str += `${s.toString().padStart(2, '0')}`;
-		if (f)
-			str += `.${f.toString().slice(0, 2).padEnd(2, '0')}`;
-
-		return str;
+		return this.toString();
 	}
+
+	setDefaultFormat(format: string) {
+		this._defaultFormat = format;
+	}
+
+	toString(format = this._defaultFormat) {
+		return formatTimeSpan(this, format);
+	}
+}
+
+// This regex will generate 2 groups and only one is defined with literal
+// It could generate one group for both case ('' & \) but unfortunately
+// JS doesn't support Branch Reset Group (?|...) and Safari doesn't
+// support Lookbehind (?<=...)
+// Branch Reset exp => (?|'([^']+)'|\\(.))
+// Lookbehind exp => ((?<=')[^']+(?=')|(?<=\\).)
+const REGEX_LITERAL = /(?:'([^']+)'|\\(.))/;
+const REGEX_SYMBOLS = /[+-]|(?:d|D|H|M|S)+|(?:h|m|s){1,2}|f{1,3}/;
+const REGEX_FORMAT = new RegExp(`${REGEX_LITERAL.source}|${REGEX_SYMBOLS.source}`, 'g');
+const REGEX_OPT_FORMAT = new RegExp(`\\[${REGEX_LITERAL.source}?(${REGEX_SYMBOLS.source})${REGEX_LITERAL.source}?]`, 'g');
+
+function formatNum(n: number, pad: number, opt: boolean, c = n) {
+	return (!opt || c >= 1) ? String(n).padStart(pad, '0') : '';
+}
+
+function formatUnit(num: number, total: number, pad: number, opt: boolean) {
+	return formatNum(Math.abs(num), pad, opt, Math.abs(total));
+}
+
+function formatTotal(total: number, pad: number, opt: boolean) {
+	return formatNum(Math.trunc(Math.abs(total)), pad, opt);
+}
+
+const matches: Record<string, (ts: TimeSpan, pad: number, opt: boolean) => string> = {
+	'+': ({ totalMilliseconds: ms }) => (ms >= 0) ? '+' : '-',
+	'-': ({ totalMilliseconds: ms }) => (ms < 0) ? '-' : '',
+	'd': (ts, pad, opt) => formatUnit(ts.days, ts.totalDays, pad, opt),
+	'D': (ts, pad, opt) => formatTotal(ts.totalDays, pad, opt),
+	'h': (ts, pad, opt) => formatUnit(ts.hours, ts.totalHours, pad, opt),
+	'H': (ts, pad, opt) => formatTotal(ts.totalHours, pad, opt),
+	'm': (ts, pad, opt) => formatUnit(ts.minutes, ts.totalMinutes, pad, opt),
+	'M': (ts, pad, opt) => formatTotal(ts.totalMinutes, pad, opt),
+	's': (ts, pad, opt) => formatUnit(ts.seconds, ts.totalSeconds, pad, opt),
+	'S': (ts, pad, opt) => formatTotal(ts.totalSeconds, pad, opt),
+	'f': (ts, pad, opt) => {
+		const ms = String(Math.trunc(Math.abs(ts.milliseconds))).padStart(3, '0').slice(0, pad);
+		return (!opt || !/^0+$/.test(ms)) ? ms : '';
+	}
+};
+
+export function formatTimeSpan(ts: TimeSpan, formatStr: string) {
+	return formatStr.replace(REGEX_OPT_FORMAT, (_, $1: string, $2: string, $3: string, $4: string, $5: string) => {
+		const f = matches[$3[0]](ts, $3.length, true);
+		return f ? `${$1 ?? $2 ?? ''}${f}${$4 ?? $5 ?? ''}` : '';
+	}).replace(REGEX_FORMAT, (match, $1: string, $2: string) => $1 || $2 || matches[match[0]](ts, match.length, false));
 }
