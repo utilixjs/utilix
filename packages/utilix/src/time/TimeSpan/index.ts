@@ -14,12 +14,23 @@ const DEFAULT_FORMAT = '-[d\\.]hh:mm:ss[\\.fff]';
 
 export class TimeSpan {
 	private _defaultFormat = DEFAULT_FORMAT;
+	private readonly _ms: ValueOrGetter<number>;
 
-	constructor(private readonly ms: ValueOrGetter<number>) {
+	constructor(milliseconds: ValueOrGetter<number>);
+	constructor(minutes: number, seconds: number);
+	constructor(hours: number, minutes: number, seconds: number);
+	constructor(days: number, hours: number, minutes: number, seconds: number);
+	constructor(days: number, hours: number, minutes: number, seconds: number, milliseconds: number);
+	constructor(value: ValueOrGetter<number>, ...args: number[]) {
+		this._ms = (!args.length) ? value : ((args.length === 1)
+			? (toValue(value) * msMinute + args[0] * msSecond)
+			: (args.length === 2)
+				? (toValue(value) * msHour + args[0] * msMinute + args[1] * msSecond)
+				: (toValue(value) * msDay + args[0] * msHour + args[1] * msMinute + args[2] * msSecond + (args[3] ?? 0)));
 	}
 
 	get totalMilliseconds() {
-		return toValue(this.ms);
+		return toValue(this._ms);
 	}
 
 	get totalSeconds() {

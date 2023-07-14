@@ -19,6 +19,13 @@ describe('TimeSpan', () => {
 		expect(ts.hours).toBe(6);
 		expect(ts.days).toBe(14);
 	});
+
+	it('should initializes with multi args overloads', () => {
+		expect(new TimeSpan(1.5, 30).toString()).toBe('00:02:00');
+		expect(new TimeSpan(1, 100, 10).toString()).toBe('02:40:10');
+		expect(new TimeSpan(1, 2, 3, 4).toString()).toBe('1.02:03:04');
+		expect(new TimeSpan(11, 1, 11, 10, 1).toString()).toBe('11.01:11:10.001');
+	});
 });
 
 describe('TimeSpan format', () => {
