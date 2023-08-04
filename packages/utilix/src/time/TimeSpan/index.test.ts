@@ -26,6 +26,14 @@ describe('TimeSpan', () => {
 		expect(new TimeSpan(1, 2, 3, 4).toString()).toBe('1.02:03:04');
 		expect(new TimeSpan(11, 1, 11, 10, 1).toString()).toBe('11.01:11:10.001');
 	});
+
+	it('should initializes from time units', () => {
+		expect(TimeSpan.fromDays(1.23456).toString()).toBe('1.05:37:45.984');
+		expect(TimeSpan.fromHours(0.2539).toString()).toBe('00:15:14.040');
+		expect(TimeSpan.fromMinutes(60).toString()).toBe('01:00:00');
+		// Try 32.157
+		expect(TimeSpan.fromSeconds(32.156).toString()).toBe('00:00:32.156');
+	});
 });
 
 describe('TimeSpan format', () => {

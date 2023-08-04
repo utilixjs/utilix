@@ -80,6 +80,22 @@ export class TimeSpan {
 	toString(format = this._defaultFormat) {
 		return formatTimeSpan(this, format);
 	}
+
+	static fromSeconds(value: ValueOrGetter<number>) {
+		return fromUnit(value, msSecond);
+	}
+
+	static fromMinutes(value: ValueOrGetter<number>) {
+		return fromUnit(value, msMinute);
+	}
+
+	static fromHours(value: ValueOrGetter<number>) {
+		return fromUnit(value, msHour);
+	}
+
+	static fromDays(value: ValueOrGetter<number>) {
+		return fromUnit(value, msDay);
+	}
 }
 
 // This regex will generate 2 groups and only one is defined with literal
@@ -92,6 +108,10 @@ const REGEX_LITERAL = /(?:'([^']+)'|\\(.))/;
 const REGEX_SYMBOLS = /[+-]|(?:d|D|H|M|S)+|(?:h|m|s){1,2}|f{1,3}/;
 const REGEX_FORMAT = new RegExp(`${REGEX_LITERAL.source}|${REGEX_SYMBOLS.source}`, 'g');
 const REGEX_OPT_FORMAT = new RegExp(`\\[${REGEX_LITERAL.source}?(${REGEX_SYMBOLS.source})${REGEX_LITERAL.source}?]`, 'g');
+
+function fromUnit(value: ValueOrGetter<number>, scale: number) {
+	return new TimeSpan(() => toValue(value) * scale);
+}
 
 function formatNum(n: number, pad: number, opt: boolean, c = n) {
 	return (!opt || c >= 1) ? String(n).padStart(pad, '0') : '';
