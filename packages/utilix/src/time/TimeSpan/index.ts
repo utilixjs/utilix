@@ -96,6 +96,25 @@ export class TimeSpan {
 	static fromDays(value: ValueOrGetter<number>) {
 		return fromUnit(value, msDay);
 	}
+
+	static parse(str: string) {
+		const num = Number(str);
+		if (Number.isNaN(num)) {
+			const match = str.match(REGEX_SPARSE) ?? str.match(REGEX_TPARSE);
+			if (match) {
+				const sign = (match[1] === '-') ? -1 : 1;
+				return new TimeSpan(
+					Number(match[2] ?? 0) * sign,
+					Number(match[3] ?? 0) * sign,
+					Number(match[4] ?? 0) * sign,
+					Number(match[5] ?? 0) * sign,
+					Number(match[6] ?? 0) * sign);
+			}
+		}
+
+		return new TimeSpan(num);
+	}
+
 }
 
 // This regex will generate 2 groups and only one is defined with literal
@@ -108,6 +127,9 @@ const REGEX_LITERAL = /(?:'([^']+)'|\\(.))/;
 const REGEX_SYMBOLS = /[+-]|(?:d|D|H|M|S)+|(?:h|m|s){1,2}|f{1,3}/;
 const REGEX_FORMAT = new RegExp(`${REGEX_LITERAL.source}|${REGEX_SYMBOLS.source}`, 'g');
 const REGEX_OPT_FORMAT = new RegExp(`\\[${REGEX_LITERAL.source}?(${REGEX_SYMBOLS.source})${REGEX_LITERAL.source}?]`, 'g');
+
+const REGEX_SPARSE = /^([+-])?(?:(\d+(?:\.\d+)?)d)?(?:(\d+(?:\.\d+)?)h)?(?:(\d+(?:\.\d+)?)m)?(?:(\d+(?:\.\d+)?)s)?(?:(\d+(?:\.\d+)?)ms)?$/i;
+const REGEX_TPARSE = /^([+-])?(?:(?:(\d+)(?:\.|:))?(\d{1,2}):)?(\d{1,2}):(\d{1,2})(?:(?:\.|:)(\d+))?$/;
 
 function fromUnit(value: ValueOrGetter<number>, scale: number) {
 	return new TimeSpan(() => toValue(value) * scale);

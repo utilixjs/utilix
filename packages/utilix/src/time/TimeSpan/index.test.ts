@@ -101,3 +101,24 @@ describe('TimeSpan format', () => {
 		expect(ts2.toString('[d\\.][hh\\:]mm:ss[\\.ff]')).toBe('6.00:04:11');
 	});
 });
+
+describe('TimeSpan parse', () => {
+	it('should parse numbers as total milliseconds', () => {
+		expect(TimeSpan.parse('12345').totalSeconds).toBe(12.345);
+		expect(TimeSpan.parse('-54321').totalSeconds).toBe(-54.321);
+		expect(TimeSpan.parse('-543.21').totalSeconds).toBeCloseTo(-0.543);
+	});
+
+	it('should parse time formats', () => {
+		expect(TimeSpan.parse('01:20:30').totalSeconds).toBe(4830);
+		expect(TimeSpan.parse('77:88:99.100').toString()).toBe('3.06:29:39.100');
+		expect(TimeSpan.parse('1:1').totalSeconds).toBe(61);
+	});
+
+	it('should parse time units', () => {
+		expect(TimeSpan.parse('24h').totalDays).toBe(1);
+		expect(TimeSpan.parse('456.78s').toString()).toBe('00:07:36.780');
+		expect(TimeSpan.parse('-1m').totalMinutes).toBe(-1);
+		expect(TimeSpan.parse('1d2ms').toString()).toBe('1.00:00:00.002');
+	});
+});
