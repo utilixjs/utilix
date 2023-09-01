@@ -54,8 +54,8 @@ importers:
         specifier: ^3.28.1
         version: 3.28.1
       rollup-plugin-dts:
-        specifier: ^5.3.1
-        version: 5.3.1(rollup@3.28.1)(typescript@5.2.2)
+        specifier: ^6.0.1
+        version: 6.0.1(rollup@3.28.1)(typescript@5.2.2)
       rollup-plugin-esbuild:
         specifier: ^5.0.0
         version: 5.0.0(esbuild@0.19.2)(rollup@3.28.1)
@@ -1035,7 +1035,7 @@ packages:
   /@vitest/snapshot@0.34.3:
     resolution: {integrity: sha512-QyPaE15DQwbnIBp/yNJ8lbvXTZxS00kRly0kfFgAD5EYmCbYcA+1EEyRalc93M0gosL/xHeg3lKAClIXYpmUiQ==}
     dependencies:
-      magic-string: 0.30.1
+      magic-string: 0.30.3
       pathe: 1.1.1
       pretty-format: 29.6.1
     dev: true
@@ -2377,12 +2377,12 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup-plugin-dts@5.3.1(rollup@3.28.1)(typescript@5.2.2):
-    resolution: {integrity: sha512-gusMi+Z4gY/JaEQeXnB0RUdU82h1kF0WYzCWgVmV4p3hWXqelaKuCvcJawfeg+EKn2T1Ie+YWF2OiN1/L8bTVg==}
-    engines: {node: '>=v14.21.3'}
+  /rollup-plugin-dts@6.0.1(rollup@3.28.1)(typescript@5.2.2):
+    resolution: {integrity: sha512-XJbCldVrp4TLc2Hg4DfrRiJgzJ73uhZB0sPSDizgdlrhSJ1bsIkkRMkwRKNQYgkbfMz4CHLdbnFKVivHE0vsPA==}
+    engines: {node: '>=16'}
     peerDependencies:
-      rollup: ^3.0
-      typescript: ^4.1 || ^5.0
+      rollup: ^3.25
+      typescript: ^4.5 || ^5.0
     dependencies:
       magic-string: 0.30.3
       rollup: 3.28.1
