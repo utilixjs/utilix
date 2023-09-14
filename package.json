@@ -2,7 +2,7 @@
 	"name": "@utilix/monorepo",
 	"version": "0.0.0",
 	"private": true,
-	"packageManager": "pnpm@8.7.1",
+	"packageManager": "pnpm@8.7.5",
 	"type": "module",
 	"scripts": {
 		"build": "pnpm -r run build",
@@ -13,16 +13,16 @@
 	},
 	"keywords": [],
 	"devDependencies": {
-		"@tsconfig/node18": "^18.2.1",
+		"@tsconfig/node18": "^18.2.2",
 		"@types/eslint": "^8.44.2",
-		"@types/node": "18.17.12",
-		"@typescript-eslint/eslint-plugin": "^6.5.0",
-		"@typescript-eslint/parser": "^6.5.0",
-		"changelogithub": "^0.12.12",
-		"eslint": "^8.48.0",
+		"@types/node": "18.17.15",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
+		"changelogithub": "^0.13.0",
+		"eslint": "^8.49.0",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
-		"vitest": "^0.34.3"
+		"vitest": "^0.34.4"
 	},
 	"author": "",
 	"license": "MIT"
