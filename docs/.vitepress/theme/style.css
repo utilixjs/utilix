@@ -1,0 +1,130 @@
+/**
+ * Colors
+ * -------------------------------------------------------------------------- */
+
+ :root {
+	--vp-c-default-1: #d1d1dd;
+	--vp-c-default-2: #cdcdd8;
+	--vp-c-default-3: #bdbdc7;
+	--vp-c-default-soft: var(--vp-c-gray-soft);
+
+	--vp-c-brand-1: #e9c582;
+	--vp-c-brand-2: #ce996a;
+	--vp-c-brand-3: #ad7d53;
+	--vp-c-brand-soft: var(--vp-c-indigo-soft);
+
+	--vp-c-tip-1: var(--vp-c-brand-1);
+	--vp-c-tip-2: var(--vp-c-brand-2);
+	--vp-c-tip-3: var(--vp-c-brand-3);
+	--vp-c-tip-soft: var(--vp-c-brand-soft);
+
+	--vp-c-warning-1: var(--vp-c-yellow-1);
+	--vp-c-warning-2: var(--vp-c-yellow-2);
+	--vp-c-warning-3: var(--vp-c-yellow-3);
+	--vp-c-warning-soft: var(--vp-c-yellow-soft);
+
+	--vp-c-danger-1: var(--vp-c-red-1);
+	--vp-c-danger-2: var(--vp-c-red-2);
+	--vp-c-danger-3: var(--vp-c-red-3);
+	--vp-c-danger-soft: var(--vp-c-red-soft);
+}
+
+.dark {
+	--vp-c-default-1: #4c4c52;
+	--vp-c-default-2: #2d2b3a;
+	--vp-c-default-3: #211f35;
+
+	--vp-c-brand-1: #ffda93;
+}
+
+:root {
+	--vp-c-bg-alt: #f5f5fa;
+	--vp-c-bg-soft: #f6f6f7;
+}
+
+.dark {
+	--vp-c-bg: #12111d;
+	--vp-c-bg-alt: #0c0b13;
+	--vp-c-bg-elv: #211f35;
+	--vp-c-bg-soft: #211f35;
+}
+
+
+:root {
+	--vp-c-border: #c2c2c4;
+	--vp-c-divider: #e2e2e3;
+	--vp-c-gutter: #e2e2e3;
+}
+
+.dark {
+	--vp-c-border: #3c3f44;
+	--vp-c-divider: #2e2e32;
+	--vp-c-gutter: #000000;
+}
+
+/**
+ * Component: Button
+ * -------------------------------------------------------------------------- */
+
+:root {
+	--vp-button-brand-border: transparent;
+	--vp-button-brand-text: var(--vp-c-white);
+	--vp-button-brand-bg: var(--vp-c-brand-3);
+	--vp-button-brand-hover-border: transparent;
+	--vp-button-brand-hover-text: var(--vp-c-white);
+	--vp-button-brand-hover-bg: var(--vp-c-brand-2);
+	--vp-button-brand-active-border: transparent;
+	--vp-button-brand-active-text: var(--vp-c-white);
+	--vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+/**
+ * Component: Home
+ * -------------------------------------------------------------------------- */
+
+:root {
+	--vp-home-hero-name-color: transparent;
+	--vp-home-hero-name-background: -webkit-linear-gradient(
+		120deg,
+		#f6c17d 30%,
+		#84e1f1
+	);
+
+	--vp-home-hero-image-background-image: linear-gradient(
+		-45deg,
+		#f6c17d 50%,
+		#84e1f1 50%
+	);
+	--vp-home-hero-image-filter: blur(40px);
+}
+
+@media (min-width: 640px) {
+	:root {
+		--vp-home-hero-image-filter: blur(56px);
+	}
+}
+
+@media (min-width: 960px) {
+	:root {
+		--vp-home-hero-image-filter: blur(72px);
+	}
+}
+
+/**
+ * Component: Custom Block
+ * -------------------------------------------------------------------------- */
+
+:root {
+	--vp-custom-block-tip-border: transparent;
+	--vp-custom-block-tip-text: var(--vp-c-text-1);
+	--vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+	--vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
+}
+
+/**
+ * Component: Algolia
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+	--docsearch-primary-color: var(--vp-c-brand-1) !important;
+}
