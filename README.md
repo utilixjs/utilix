@@ -1,15 +1,22 @@
-# Utilix
+<p align="center">
+	<a href="http://utilix.dev" target="_blank" rel="noopener noreferrer">
+		<img width="120" src="./.github/assets/logo/u4x.png" alt="Utilix logo">
+	</a>
+</p>
+<p align="center">
+  <a href="https://npmjs.com/package/utilix"><img src="https://img.shields.io/npm/v/utilix.svg" alt="npm package"></a>
+  <a href="https://github.com/utilixjs/utilix/actions/workflows/ci.yml"><img src="https://github.com/utilixjs/utilix/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+</p>
 
-[![npm](https://img.shields.io/npm/v/utilix.svg)](https://www.npmjs.com/package/utilix) [![CI](https://github.com/utilixjs/utilix/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/utilixjs/utilix/actions/workflows/ci.yml)
+# Utilix
 
 Modern utilities library (🚧 under development 🚧)
 
+- 🛠️ Feature Rich
+- 🌳 Tree-Shakable
+- 📦 Modular & Strongly Typed
+
+
 Utilix is a **JavaScript library** that provides a collection of **useful and reusable** functions for web development. It helps you to **simplify your code**, **avoid common errors**, and **enhance your productivity**. Utilix is **lightweight**, **modular**, and **easy to use**. Whether you need to manipulate strings, arrays, objects, dates, or DOM elements, Utilix has a function for that.
 
-### ToDo
-- [x] Auto export files (e.g. `src/index.ts`) generator
-- [x] Build script
-- [ ] Documentation using [VitePress](https://vitepress.dev/)
-- [x] Auto generate changelog om release (Thanks to [changelogithub](https://github.com/antfu/changelogithub))
-- [ ] Modules meta files (changelog, since v., last update, credit, contributors ...) & it's generator
-- [ ] More functions (obviously)
+Check the [roadmap](https://github.com/utilixjs/utilix/issues/24) for the last updates.
