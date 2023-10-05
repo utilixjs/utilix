@@ -128,3 +128,15 @@
 .DocSearch {
 	--docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
+
+a:not(.VPButton) {
+	color: var(--vp-c-brand);
+}
+
+a:not(.VPButton):hover {
+	text-decoration: underline;
+}
+
+.VPFooter {
+	border-top-color: var(--vp-c-default-3) !important;
+}
