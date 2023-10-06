@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="http://utilix.dev" target="_blank" rel="noopener noreferrer">
-		<img width="120" src="./.github/assets/logo/u4x.png" alt="Utilix logo">
+		<img height="170" src="./.github/assets/logo/u4x.png" alt="Utilix logo">
 	</a>
 </p>
 <p align="center">
