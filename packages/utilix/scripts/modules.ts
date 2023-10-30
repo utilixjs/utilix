@@ -1,11 +1,13 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath, URL } from 'url';
+import type { Awaitable, Mutable } from "../src/types";
 
 export interface UModule {
 	readonly name: string;
 	readonly dir: string;
 	readonly index: string;
+	readonly doc?: string;
 }
 
 export interface UCategory extends UModule {
@@ -18,40 +20,52 @@ export const srcDir = path.join(rootDir, 'src/');
 console.log('root:', rootDir);
 console.log('src:', srcDir);
 
-function mapModules<T>(dir: string, mapper: (c: T, m: string, d: string) => void, cls: T) {
-	return fs.readdirSync(dir, { withFileTypes: true }).reduce((c, m) => {
+async function mapModules<T>(dir: string, mapper: (moduleName: string, indexFile: string) => Awaitable<T>) {
+	const modules: T[] = [];
+	const dirs = await fs.readdir(dir, { withFileTypes: true });
+
+	for (const m of dirs) {
 		if (m.isDirectory() && !m.name.startsWith('.')) {
-			const sdir = path.join(dir, m.name, 'index.ts');
-			if (fs.existsSync(sdir)) {
-				mapper(c, m.name, sdir);
+			const indexFile = path.join(dir, m.name, 'index.ts');
+			if (fs.existsSync(indexFile)) {
+				modules.push(await mapper(m.name, indexFile));
 			}
 		}
+	}
 
-		return c;
-	}, cls);
+	return modules;
 }
 
-export const modules: readonly UCategory[] = mapModules<UCategory[]>(srcDir, (ctrgs, cname, cindex) => {
-	const cdir = path.join(cindex, '../');
-	console.log('Category', cname, `(${cdir})`);
+export const modules: readonly UCategory[] = await mapModules<UCategory>(srcDir, async (cName, cIndex) => {
+	const cDir = path.join(cIndex, '..');
+	console.log('Category', cName, `(${cDir})`);
 
-	ctrgs.push({
-		name: cname,
-		index: cindex,
-		dir: cdir,
-		modules: mapModules<UModule[]>(cdir, (mdls, mname, mindex) => {
-			const mdir = path.join(mindex, '../');
-			console.log('|- Module', mname, `(${mdir})`);
+	const category: UCategory = {
+		name: cName,
+		index: cIndex,
+		dir: cDir,
+		modules: await mapModules<UModule>(cDir, async (mName, mIndex) => {
+			const mDir = path.join(mIndex, '..');
+			console.log('├─ Module', mName, `(${mDir})`);
 
-			mdls.push({
-				name: mname,
-				index: mindex,
-				dir: mdir
-			});
-		}, [])
-	});
+			const module: Mutable<UModule> = {
+				name: mName,
+				index: mIndex,
+				dir: mDir
+			};
+
+			const docFile = path.join(mDir, 'index.md');
+			if (await fs.exists(docFile)) {
+				module.doc = docFile;
+			}
+
+			return module;
+		})
+	};
 	console.log();
-}, []);
+
+	return category;
+});
 
 export const mainModule: UModule & {
 	readonly modules: readonly UCategory[];
