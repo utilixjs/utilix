@@ -21,6 +21,19 @@ export default defineConfig({
 	],
 
 	cleanUrls: true,
+
+	srcDir: '../',
+	srcExclude: ['**/README.md'],
+	vite: {
+		publicDir: 'docs/public'
+	},
+
+	rewrites: {
+		'packages/utilix/src/:cat/:func/index.md': 'modules/:cat/:func.md',
+		'docs/:md.md': ':md.md',
+		'docs/guide/:md.md': 'guide/:md.md'
+	},
+
 	themeConfig: {
 		logo: { src: '/media/logo/u4ts.png' },
 

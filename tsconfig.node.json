@@ -7,10 +7,11 @@
 		"noEmit": true
 	},
 	"include": [
-		"changelogithub.config.ts",
-		"vitest.workspace.ts",
+		"docs",
 		"scripts",
 		"packages/*/scripts",
 		"packages/*/*.config.ts",
+		"changelogithub.config.ts",
+		"vitest.workspace.ts"
 	]
 }
