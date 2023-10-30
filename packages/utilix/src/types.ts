@@ -9,3 +9,4 @@ export type Func<TResult = void, TArgs extends any[] = []> = (...args: TArgs) =>
 export type Action<TArgs extends any[] = []> = Func<void, TArgs>;
 
 export type ValueOrGetter<T> = T | Func<T>;
+export type Awaitable<T> = T | PromiseLike<T>;
