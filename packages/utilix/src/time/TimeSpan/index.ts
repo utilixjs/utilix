@@ -114,7 +114,6 @@ export class TimeSpan {
 
 		return new TimeSpan(num);
 	}
-
 }
 
 // This regex will generate 2 groups and only one is defined with literal

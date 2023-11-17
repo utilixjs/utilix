@@ -10,7 +10,7 @@
 		"utilities"
 	],
 	"scripts": {
-		"build": "pnpm typecheck && tsx ./scripts/build.ts",
+		"build": "tsx ./scripts/build.ts",
 		"build:rollup": "rollup --config rollup.config.ts --configPlugin esbuild",
 		"update": "tsx ./scripts/update.ts",
 		"typecheck": "tsc --noEmit"

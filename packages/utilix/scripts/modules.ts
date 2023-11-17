@@ -20,51 +20,51 @@ export const srcDir = path.join(rootDir, 'src/');
 console.log('root:', rootDir);
 console.log('src:', srcDir);
 
-async function mapModules<T>(dir: string, mapper: (moduleName: string, indexFile: string) => Awaitable<T>) {
+async function mapModules<T>(dir: string, mapper: (module: Mutable<UModule>, i: number, l: number) => Awaitable<T | void>) {
 	const modules: T[] = [];
-	const dirs = await fs.readdir(dir, { withFileTypes: true });
+	const dirs = (await fs.readdir(dir, { withFileTypes: true }))
+		.filter(d => d.isDirectory() && !d.name.startsWith('.'));
 
-	for (const m of dirs) {
-		if (m.isDirectory() && !m.name.startsWith('.')) {
-			const indexFile = path.join(dir, m.name, 'index.ts');
-			if (fs.existsSync(indexFile)) {
-				modules.push(await mapper(m.name, indexFile));
-			}
-		}
+	for (let i = 0, l = dirs.length; i < l; i++) {
+		const m = dirs[i];
+		const mDir = path.join(dir, m.name);
+		const indexFile = path.join(mDir, 'index.ts');
+		const docFile = path.join(mDir, 'index.md');
+		const module = await mapper({
+			name: m.name,
+			dir: mDir,
+			index: (await fs.exists(indexFile)) ? indexFile : '',
+			doc: (await fs.exists(docFile)) ? docFile : undefined,
+		}, i, l);
+		if (module)
+			modules.push(module);
 	}
 
 	return modules;
 }
 
-export const modules: readonly UCategory[] = await mapModules<UCategory>(srcDir, async (cName, cIndex) => {
-	const cDir = path.join(cIndex, '..');
-	console.log('Category', cName, `(${cDir})`);
+export const modules: readonly UCategory[] = await mapModules<UCategory>(srcDir, async (c) => {
+	console.group('Category', c.name, `(${c.dir})`);
 
-	const category: UCategory = {
-		name: cName,
-		index: cIndex,
-		dir: cDir,
-		modules: await mapModules<UModule>(cDir, async (mName, mIndex) => {
-			const mDir = path.join(mIndex, '..');
-			console.log('├─ Module', mName, `(${mDir})`);
+	const cModules = await mapModules<UModule>(c.dir, (module, i, l) => {
+		const srcExists = !!module.index;
+		console.log(`${(i === l - 1) ? '└' : '├'}─`, 'Module', module.name, srcExists ? `(${module.dir})${module.doc ? ' 📖' : ''}` : "\x1b[33m[Src index not found!]\x1b[0m");
 
-			const module: Mutable<UModule> = {
-				name: mName,
-				index: mIndex,
-				dir: mDir
-			};
-
-			const docFile = path.join(mDir, 'index.md');
-			if (await fs.exists(docFile)) {
-				module.doc = docFile;
-			}
-
+		if (srcExists) {
 			return module;
-		})
-	};
-	console.log();
+		}
+	});
 
-	return category;
+	if (!cModules.length) {
+		console.log(`\x1b[33mNo module found in [${c.name}] category\x1b[0m`);
+	}
+	console.groupEnd();
+
+	if (cModules.length) {
+		const category = c as Mutable<UCategory>;
+		category.modules = cModules;
+		return category;
+	}
 });
 
 export const mainModule: UModule & {

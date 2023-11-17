@@ -1,16 +1,16 @@
 import path from "path";
-import { emptyDirSync } from "fs-extra";
+import { execSync } from "child_process";
+import { emptyDir } from "fs-extra";
 import { rollup, type RollupOptions, type RollupBuild } from 'rollup';
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import tsconfigPaths from "rollup-plugin-tsconfig-paths";
-import { mainModule, rootDir } from "./modules";
-import { updateImports } from "./updateImports";
 
-console.info("⚙️  Preparing for build");
+console.group("⚙️ Preparing for build");
 
-await updateImports();
+await (await import("./updateImports")).updateImports();
 
+const { mainModule, rootDir } = await import("./modules");
 const distDir = path.join(rootDir, 'dist/');
 const moduleInputs: RollupOptions['input'] = { 'index': mainModule.index };
 
@@ -21,10 +21,13 @@ mainModule.modules.forEach(c => {
 	});
 });
 
-emptyDirSync(distDir);
+await emptyDir(distDir);
+
+console.log("Type checking...");
+execSync('pnpm typecheck', { stdio: 'inherit' });
 
 const esbuildPlugin = esbuild({
-	target: 'es2017',
+	target: 'es2020',
 	minify: true
 });
 const tsconfigPathsPlugin = tsconfigPaths();
@@ -55,7 +58,8 @@ async function generateOutputs(bundle: RollupBuild, outputOpts: RollupOptions['o
 	}
 }
 
-console.info("⚙️  Bundling ESM & CJS modules");
+console.groupEnd();
+console.group("⚙️ Bundling ESM & CJS modules");
 
 await build({
 	input: moduleInputs,
@@ -74,7 +78,8 @@ await build({
 	]
 });
 
-console.info("⚙️  Bundling TS type definitions");
+console.groupEnd();
+console.group("⚙️ Bundling TS type definitions");
 
 await build({
 	input: moduleInputs,
@@ -86,7 +91,8 @@ await build({
 	}
 });
 
-console.info("⚙️  Bundling IIFE globals");
+console.groupEnd();
+console.group("⚙️ Bundling IIFE globals");
 
 function getIIFEConfig(input: string, outputFile: string): RollupOptions {
 	return {
@@ -103,4 +109,5 @@ function getIIFEConfig(input: string, outputFile: string): RollupOptions {
 
 await Promise.all(Object.entries(moduleInputs).map(([output, input]) => build(getIIFEConfig(input, output))));
 
+console.groupEnd();
 console.info("🚀 Build finished successfully");
