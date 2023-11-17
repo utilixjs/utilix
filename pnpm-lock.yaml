@@ -8,9 +8,9 @@ importers:
 
   .:
     devDependencies:
-      '@tsconfig/node18':
-        specifier: ^18.2.2
-        version: 18.2.2
+      '@tsconfig/node20':
+        specifier: ^20.1.2
+        version: 20.1.2
       '@types/eslint':
         specifier: ^8.44.6
         version: 8.44.6
@@ -911,8 +911,8 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@tsconfig/node18@18.2.2:
-    resolution: {integrity: sha512-d6McJeGsuoRlwWZmVIeE8CUA27lu6jLjvv1JzqmpsytOYYbVi1tHZEnwCNVOXnj4pyLvneZlFlpXUK+X9wBWyw==}
+  /@tsconfig/node20@20.1.2:
+    resolution: {integrity: sha512-madaWq2k+LYMEhmcp0fs+OGaLFk0OenpHa4gmI4VEmCKX4PJntQ6fnnGADVFrVkBj0wIdAlQnK/MrlYTHsa1gQ==}
     dev: true
 
   /@types/chai-subset@1.3.3:
