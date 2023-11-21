@@ -5,6 +5,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
+			'@internal': fileURLToPath(new URL('./src/.internal', import.meta.url)),
 		}
 	}
 });

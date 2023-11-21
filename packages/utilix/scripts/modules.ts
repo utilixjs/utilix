@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath, URL } from 'url';
-import type { Awaitable, Mutable } from "../src/types";
+import type { Awaitable, Mutable } from "utilix/types";
 
 export interface UModule {
 	readonly name: string;

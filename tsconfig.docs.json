@@ -1,0 +1,22 @@
+{
+	"extends": "@vue/tsconfig/tsconfig.dom.json",
+	"compilerOptions": {
+		"types": ["node"],
+		"noEmit": true,
+		"paths": {
+			"utilix": ["./packages/utilix/src/index.ts"],
+			"utilix/*": ["./packages/utilix/src/*"],
+		}
+	},
+	"include": [
+		"docs/.vitepress/**/*"
+	],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		},
+		{
+			"path": "./packages/utilix/tsconfig.json"
+		}
+	]
+}

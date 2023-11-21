@@ -4,16 +4,16 @@
 	"type": "module",
 	"license": "MIT",
 	"author": "Waleed Khaled <https://github.com/Waleed-KH>",
-	"description": "A modern and flexible utilities library for JavaScript",
+	"description": "Modern and flexible utilities library for JavaScript",
 	"keywords": [
 		"utils",
 		"utilities"
 	],
 	"scripts": {
 		"build": "tsx ./scripts/build.ts",
-		"build:rollup": "rollup --config rollup.config.ts --configPlugin esbuild",
 		"update": "tsx ./scripts/update.ts",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"tsc:build": "tsc --build"
 	},
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",

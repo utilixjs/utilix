@@ -4,14 +4,26 @@
 		"module": "ESNext",
 		"types": ["node"],
 		"moduleResolution": "bundler",
-		"noEmit": true
+
+		"outDir": "dist",
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+
+		"paths": {
+			"utilix": ["./packages/utilix/src/index.ts"],
+			"utilix/*": ["./packages/utilix/src/*"],
+		}
 	},
 	"include": [
-		"docs",
-		"scripts",
 		"packages/*/scripts",
 		"packages/*/*.config.ts",
 		"changelogithub.config.ts",
 		"vitest.workspace.ts"
+	],
+	"references": [
+		{
+			"path": "./packages/utilix/tsconfig.json"
+		}
 	]
 }

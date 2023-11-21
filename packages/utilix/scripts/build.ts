@@ -2,7 +2,7 @@ import path from "path";
 import { execSync } from "child_process";
 import { emptyDir } from "fs-extra";
 import { rollup, type RollupOptions, type RollupBuild } from 'rollup';
-import dts from 'rollup-plugin-dts';
+import { dts } from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 
@@ -83,7 +83,11 @@ console.group("⚙️ Bundling TS type definitions");
 
 await build({
 	input: moduleInputs,
-	plugins: [tsconfigPathsPlugin, dts()],
+	plugins: [tsconfigPathsPlugin, dts({
+		compilerOptions: {
+			composite: false
+		}
+	})],
 	output: {
 		dir: distDir,
 		entryFileNames: `[name].d.ts`,

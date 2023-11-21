@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "pnpm -r run build",
 		"test": "vitest",
-		"typecheck": "tsc --noEmit --project tsconfig.node.json",
+		"typecheck": "pnpm --filter utilix tsc:build && tsc --noEmit --project tsconfig.node.json && vue-tsc --noEmit -p tsconfig.docs.json",
 		"lint": "eslint --cache .",
 		"lint:fix": "pnpm lint --fix",
 		"docs:dev": "vitepress dev docs",
@@ -21,13 +21,15 @@
 		"@types/node": "20.9.3",
 		"@typescript-eslint/eslint-plugin": "^6.12.0",
 		"@typescript-eslint/parser": "^6.12.0",
+		"@vue/tsconfig": "^0.4.0",
 		"changelogithub": "^0.13.2",
 		"eslint": "^8.54.0",
 		"typescript": "^5.3.2",
 		"vite": "^4.5.0",
 		"vitepress": "1.0.0-rc.29",
 		"vitest": "^0.34.6",
-		"vue": "^3.3.8"
+		"vue": "^3.3.8",
+		"vue-tsc": "^1.8.22"
 	},
 	"author": "",
 	"license": "MIT"

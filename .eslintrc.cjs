@@ -34,6 +34,7 @@ module.exports = {
 				'Function': false
 			},
 		}],
+		'@typescript-eslint/consistent-type-definitions': 'off',
 		'@typescript-eslint/no-empty-function': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-for-in-array': 'error',

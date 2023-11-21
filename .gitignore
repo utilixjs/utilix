@@ -15,3 +15,9 @@ cache
 coverage
 .eslintcache
 *.local
+
+# Editor directories and files
+.vscode
+!.vscode/extensions.json
+.vs
+.idea

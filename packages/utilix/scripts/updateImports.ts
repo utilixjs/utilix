@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { mainModule, type UCategory } from './modules';
-import { Mutable } from '../src/types';
+import type { Mutable } from 'utilix/types';
 
 const NLINE = '\r\n';
 
