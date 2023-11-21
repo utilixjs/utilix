@@ -9,7 +9,7 @@ module.exports = {
 		'plugin:@typescript-eslint/stylistic-type-checked',
 	],
 	parserOptions: {
-		project: ['./tsconfig.node.json', './packages/*/tsconfig.json'],
+		project: ['tsconfig.node.json', 'packages/*/tsconfig.json'],
 		tsconfigRootDir: __dirname,
 	},
 	env: {

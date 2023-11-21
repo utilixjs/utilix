@@ -7,9 +7,10 @@
 	"scripts": {
 		"build": "pnpm -r run build",
 		"test": "vitest",
-		"typecheck": "pnpm --filter utilix tsc:build && tsc --noEmit --project tsconfig.node.json && vue-tsc --noEmit -p tsconfig.docs.json",
-		"lint": "eslint --cache .",
-		"lint:fix": "pnpm lint --fix",
+		"tsc:build": "pnpm --filter utilix tsc:build",
+		"typecheck": "pnpm tsc:build && tsc --noEmit --project tsconfig.node.json && vue-tsc --noEmit -p tsconfig.docs.json",
+		"lint": "pnpm tsc:build && eslint --cache .",
+		"lint:fix": "pnpm tsc:build && pnpm lint --fix",
 		"docs:dev": "vitepress dev docs",
 		"docs:build": "vitepress build docs",
 		"docs:preview": "vitepress preview docs"

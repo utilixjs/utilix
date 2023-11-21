@@ -1,14 +1,16 @@
 import { h } from 'vue';
-import Theme from 'vitepress/theme';
+import type { Theme as ThemeType } from 'vitepress';
+import DefaultTheme from 'vitepress/theme';
 import './style.css';
 
-export default {
-	extends: Theme,
+const theme: ThemeType = {
+	extends: DefaultTheme,
 	Layout: () => {
-		return h(Theme.Layout, null, {
+		return h(DefaultTheme.Layout, null, {
 		});
 	},
 	enhanceApp({ app, router, siteData }) {
-		// ...
 	}
 };
+
+export default theme;

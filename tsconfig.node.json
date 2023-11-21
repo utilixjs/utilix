@@ -19,7 +19,8 @@
 		"packages/*/scripts",
 		"packages/*/*.config.ts",
 		"changelogithub.config.ts",
-		"vitest.workspace.ts"
+		"vitest.workspace.ts",
+		".eslintrc.*"
 	],
 	"references": [
 		{
