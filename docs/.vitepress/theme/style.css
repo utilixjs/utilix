@@ -140,3 +140,54 @@ a:not(.VPButton):hover {
 .VPFooter {
 	border-top-color: var(--vp-c-default-3) !important;
 }
+
+.badge {
+	--badge-color: #4c4c52;
+	display: inline-block;
+	padding: 0.35em  0.65em;
+	margin: 0.1em;
+	font-size: 0.65em;
+	line-height: 1;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border-radius: 0.375rem;
+	color: var(--badge-color);
+	border: 1px solid var(--badge-color);
+}
+
+.dark .badge {
+	--badge-color: #d1d1dd;
+}
+
+.badge-function {
+	--badge-color: #005CC5;
+}
+
+.dark .badge-function {
+	--badge-color: #79B8FF;
+}
+
+.badge-class {
+	--badge-color: #6F42C1;
+}
+
+.dark .badge-class {
+	--badge-color: #B392F0;
+}
+
+.badge-interface {
+	--badge-color: #E36209;
+}
+
+.dark .badge-interface {
+	--badge-color: #FFAB70;
+}
+
+.badge-type {
+	--badge-color: #D73A49;
+}
+
+.dark .badge-type {
+	--badge-color: #F97583;
+}

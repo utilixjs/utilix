@@ -1,4 +1,6 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig, type PageData } from 'vitepress';
+import Inspect from 'vite-plugin-inspect';
+import { docExporter, moduleDocTransform } from './plugins'
 
 const title = "Utilix";
 const description = "Modern and flexible utilities library for JavaScript";
@@ -25,7 +27,12 @@ export default defineConfig({
 	srcDir: '../',
 	srcExclude: ['**/README.md'],
 	vite: {
-		publicDir: 'docs/public'
+		publicDir: 'docs/public',
+		plugins: [
+			Inspect(),
+			docExporter(),
+			moduleDocTransform(),
+		]
 	},
 
 	rewrites: {
