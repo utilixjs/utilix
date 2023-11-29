@@ -1,4 +1,4 @@
-import { defineConfig, type PageData, DefaultTheme } from 'vitepress';
+import { defineConfig, type PageData, type DefaultTheme } from 'vitepress';
 import Inspect from 'vite-plugin-inspect';
 import { docExporter, moduleDocTransform } from './plugins'
 import { modules } from '../../packages/utilix/scripts/modules';
