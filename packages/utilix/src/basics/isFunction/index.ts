@@ -1,3 +1,9 @@
-export function isFunction<T extends Function>(value?: unknown): value is T {
+/**
+ * Checks if value is classified as a function.
+ *
+ * @param value The value to check.
+ * @returns `true` if value is a function, otherwise `false`.
+ */
+export function isFunction(value: unknown): value is Function {
 	return typeof value === 'function';
 }

@@ -31,6 +31,7 @@ describe('isArrayLike', () => {
 		expect(isArrayLike(args)).toBeTruthy();
 		expect(isArrayLike({ '0': 1, 'length': 1 })).toBeTruthy();
 		expect(isArrayLike('a')).toBeTruthy();
+		expect(isArrayLike(new Int8Array())).toBeTruthy();
 	});
 
 	it('should return `false` for non-array-like values', () => {
