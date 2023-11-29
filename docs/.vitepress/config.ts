@@ -1,6 +1,7 @@
-import { defineConfig, type PageData } from 'vitepress';
+import { defineConfig, type PageData, DefaultTheme } from 'vitepress';
 import Inspect from 'vite-plugin-inspect';
 import { docExporter, moduleDocTransform } from './plugins'
+import { modules } from '../../packages/utilix/scripts/modules';
 
 const title = "Utilix";
 const description = "Modern and flexible utilities library for JavaScript";
@@ -55,7 +56,8 @@ export default defineConfig({
 				items: [
 					{ text: 'Getting Started', link: '/guide/' },
 				]
-			}
+			},
+			...getModulesSidebarItems()
 		],
 
 		socialLinks: [
@@ -68,3 +70,11 @@ export default defineConfig({
 		}
 	}
 });
+
+function getModulesSidebarItems():  DefaultTheme.SidebarItem[] {
+	return modules.filter(c => c.modules.some(m => m.doc)).map(c => ({
+		text: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+		collapsed: true,
+		items: c.modules.filter(m => m.doc).map(m => ({ text: m.name, link: `/modules/${c.name}/${m.name}` }))
+	}));
+}
