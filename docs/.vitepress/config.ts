@@ -60,6 +60,19 @@ export default defineConfig({
 			...getModulesSidebarItems()
 		],
 
+		search: {
+			provider: 'local',
+			options: {
+				_render(src, env, md) {
+					if (env.frontmatter?.search === false || env.relativePath.startsWith('CODE_OF_CONDUCT')) {
+						return '';
+					}
+
+					return md.render(src, env);
+				}
+			}
+		},
+
 		socialLinks: [
 			{ icon: 'github', link: 'https://github.com/utilixjs/utilix' }
 		],
@@ -71,7 +84,7 @@ export default defineConfig({
 	}
 });
 
-function getModulesSidebarItems():  DefaultTheme.SidebarItem[] {
+function getModulesSidebarItems(): DefaultTheme.SidebarItem[] {
 	return modules.filter(c => c.modules.some(m => m.doc)).map(c => ({
 		text: c.name.charAt(0).toUpperCase() + c.name.slice(1),
 		collapsed: true,
