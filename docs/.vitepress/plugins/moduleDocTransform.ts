@@ -4,11 +4,26 @@ import * as um from './docExporter';
 const NLINE = '\r\n';
 const DNLINE = NLINE + NLINE;
 
-export function moduleDocTransform(): Plugin {
+export const UModulePathRegex = /packages\/utilix\/src\/(\w+\/\w+)\/index\.md$/;
+export const DocTransformPluginName = 'utilix-ModuleDocTransform';
+export interface DocTransformPluginAPI {
+	transform(code: string, module: string, watchModule?: string): string;
+}
+
+export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 	let exporter: um.DocExporterPluginAPI;
 
+	function transform(code: string, module: string, watchModule?: string) {
+		const codeIndex = code.indexOf('## ');
+		const md = mdExports(exporter.getExports(module, watchModule),  module.slice(module.indexOf('/') + 1));
+
+		return (codeIndex > 0)
+			? code.slice(0, codeIndex) + md +  code.slice(codeIndex)
+			: code + NLINE + md;
+	}
+
 	return {
-		name: 'utilix-ModuleDocTransform',
+		name: DocTransformPluginName,
 		enforce: 'pre',
 		configResolved({ plugins }) {
 			const exporterPlugin = plugins.find(plugin => plugin.name === um.DocExporterPluginName);
@@ -19,16 +34,13 @@ export function moduleDocTransform(): Plugin {
 		},
 
 		transform(code, id) {
-			const match = id.match(/packages\/utilix\/src\/(\w+\/(\w+))\/index\.md$/);
+			const match = id.match(UModulePathRegex);
 			if (match) {
-				const codeIndex = code.indexOf('## ');
-				const md = mdExports(exporter.getExports(match[1], id), match[2]);
-
-				return (codeIndex > 0)
-				? code.slice(0, codeIndex) + md +  code.slice(codeIndex)
-				: code + NLINE + md;
+				return transform(code, match[1], id);
 			}
 		},
+
+		api: { transform }
 	};
 }
 

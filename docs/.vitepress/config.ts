@@ -1,11 +1,14 @@
-import { defineConfig, type PageData, type DefaultTheme } from 'vitepress';
+import { defineConfig, type DefaultTheme } from 'vitepress';
 import Inspect from 'vite-plugin-inspect';
-import { docExporter, moduleDocTransform } from './plugins'
+import { docExporter, moduleDocTransform, UModulePathRegex } from './plugins'
 import { modules } from '../../packages/utilix/scripts/modules';
 
 const title = "Utilix";
 const description = "Modern and flexible utilities library for JavaScript";
 const ogImg = 'https://utilix.dev/media/og.png';
+
+const exporterPlugin = docExporter();
+const transformPlugin = moduleDocTransform();
 
 export default defineConfig({
 	lang: 'en-US',
@@ -31,8 +34,8 @@ export default defineConfig({
 		publicDir: 'docs/public',
 		plugins: [
 			Inspect(),
-			docExporter(),
-			moduleDocTransform(),
+			exporterPlugin,
+			transformPlugin,
 		]
 	},
 
@@ -66,6 +69,11 @@ export default defineConfig({
 				_render(src, env, md) {
 					if (env.frontmatter?.search === false || env.relativePath.startsWith('CODE_OF_CONDUCT')) {
 						return '';
+					}
+
+					const match = env.relativePath.match(UModulePathRegex);
+					if (match) {
+						src = transformPlugin.api.transform(src, match[1]);
 					}
 
 					return md.render(src, env);
