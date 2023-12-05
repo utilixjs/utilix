@@ -15,10 +15,10 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 
 	function transform(code: string, module: string, watchModule?: string) {
 		const codeIndex = code.indexOf('## ');
-		const md = mdExports(exporter.getExports(module, watchModule),  module.slice(module.indexOf('/') + 1));
+		const md = mdExports(exporter.getExports(module, watchModule), module.slice(module.indexOf('/') + 1));
 
 		return (codeIndex > 0)
-			? code.slice(0, codeIndex) + md +  code.slice(codeIndex)
+			? code.slice(0, codeIndex) + md + code.slice(codeIndex)
 			: code + NLINE + md;
 	}
 
@@ -129,7 +129,7 @@ function codeParameter(p: um.UModuleParameter) {
 }
 
 function codeTypeParameter(p: um.UModuleTypeParameter) {
-	return `${p.name}${p.constraint ? ` extends ${p.constraint}` : ''}: ${p.type}${codeParameterDefault(p)}`;
+	return `${p.name}${p.constraint ? ` extends ${p.constraint}` : ''}${codeParameterDefault(p)}`;
 }
 
 function codeParameterDefault(p: um.UModuleParameterLike) {

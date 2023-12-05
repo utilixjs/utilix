@@ -73,7 +73,7 @@ export default defineConfig({
 
 					const match = env.relativePath.match(UModulePathRegex);
 					if (match) {
-						src = transformPlugin.api.transform(src, match[1]);
+						src = transformPlugin.api!.transform(src, match[1]);
 					}
 
 					return md.render(src, env);
