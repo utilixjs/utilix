@@ -241,13 +241,17 @@ export class UDocExporter {
 			}
 
 			const declaration = mSymbol.valueDeclaration;
-			const mNode = this.serializeSymbol(mSymbol);
+			const mNode: UModuleTypeMember = this.serializeSymbol(mSymbol);
 
 			if (type.isClass()) {
-				(mNode as UModuleTypeMember).accessModifier = this.serializeAccessModifier(declaration);
+				mNode.accessModifier = this.serializeAccessModifier(declaration);
 			}
 
 			if (ts.isPropertyDeclaration(declaration) || ts.isPropertySignature(declaration)) {
+				if (mNode.accessModifier === 'private') {
+					continue;
+				}
+
 				const prop = mNode as UModuleField;
 				prop.kind = 'field';
 				prop.readonly = tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Readonly);
@@ -264,14 +268,19 @@ export class UDocExporter {
 					};
 					if (type.isClass()) {
 						accessor.accessModifier = this.serializeAccessModifier(dec);
+						if (accessor.accessModifier === 'private') {
+							continue;
+						}
 					}
 					prop[dec.kind === ts.SyntaxKind.SetAccessor ? 'set' : 'get'] = accessor;
+				}
+				if (!prop.get && !prop.set) {
+					continue;
 				}
 
 				members.properties.set(mNode.name, prop);
 			} else if (ts.isMethodDeclaration(declaration) || ts.isMethodSignature(declaration)) {
-				//if (members.methods[mNode.name]) {
-				if (members.methods.has(mNode.name)) {
+				if (mNode.accessModifier === 'private') {
 					continue;
 				}
 
