@@ -142,52 +142,91 @@ a:not(.VPButton):hover {
 }
 
 .badge {
-	--badge-color: #4c4c52;
+	--badge-color: 76 76 82;
+	--badge-color-text: rgb(var(--badge-color));
+	--badge-color-border: transparent;
+	--badge-color-bg: rgb(var(--badge-color) / 0.15);
+	--badge-font-size: 0.85em;
+	--badge-line-height: 0.9;
+
 	display: inline-block;
 	padding: 0.35em  0.65em;
 	margin: 0.1em;
-	font-size: 0.65em;
-	line-height: 1;
+	font-size: var(--badge-font-size);
+	line-height: var(--badge-line-height);
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
 	border-radius: 0.375rem;
-	color: var(--badge-color);
-	border: 1px solid var(--badge-color);
+	color: var(--badge-color-text);
+	background-color: var(--badge-color-bg);
+	border: 1px solid var(--badge-color-border);
+}
+
+.badge-outline {
+	--badge-color-text: rgb(var(--badge-color));
+	--badge-color-border: rgb(var(--badge-color));
+	--badge-color-bg: transparent;
+}
+
+h1 .badge,
+h2 .badge,
+h3 .badge {
+	--badge-font-size: 0.55em;
+	--badge-line-height: 0.90;
 }
 
 .dark .badge {
-	--badge-color: #d1d1dd;
+	--badge-color: 209 209 219;
 }
 
-.badge-function {
-	--badge-color: #005CC5;
+.badge-function,
+.badge-readonly,
+.badge-method,
+.badge-set {
+	--badge-color: 0 93 199;
 }
 
-.dark .badge-function {
-	--badge-color: #79B8FF;
+.dark .badge-function,
+.dark .badge-readonly,
+.dark .badge-method,
+.dark .badge-set {
+	--badge-color: 122 184 255;
 }
 
+.badge-field,
 .badge-class {
-	--badge-color: #6F42C1;
+	--badge-color: 111 66 194;
 }
 
+.dark .badge-field,
 .dark .badge-class {
-	--badge-color: #B392F0;
+	--badge-color: 180 147 240;
 }
 
+.badge-static,
+.badge-protected,
 .badge-interface {
-	--badge-color: #E36209;
+	--badge-color: 225 96 9;
 }
 
+.dark .badge-static,
+.dark .badge-protected,
 .dark .badge-interface {
-	--badge-color: #FFAB70;
+	--badge-color: 255 172 112;
 }
 
+.badge-private,
 .badge-type {
-	--badge-color: #D73A49;
+	--badge-color: 215 60 76;
 }
 
+.dark .badge-private,
 .dark .badge-type {
-	--badge-color: #F97583;
+	--badge-color: 249 118 131;
+}
+
+.badge-get,
+.dark .badge-get {
+	--badge-color: 66 189 134;
 }

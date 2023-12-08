@@ -62,58 +62,159 @@ function mdExports(exps: um.UModuleExports, main: string) {
 }
 
 function mdExport(name: string, exp: um.UModuleExport) {
-	let md = `## ${name} <span class="badge badge-${exp.kind}">${exp.kind}</span>` + DNLINE;
+	let md = `## ${name} <span class="badge badge-outline badge-${exp.kind}">${exp.kind}</span>` + DNLINE;
 
 	if (exp.kind === 'function') {
-		md += mdFunction(exp);
+		md += mdSignatures(exp.overloads, `${exp.kind} ${exp.name}`);
+	} else if (exp.kind === 'class') {
+		md += mdClass(exp);
 	}
 
 	return md;
 }
 
-function mdFunction(fn: um.UModuleFunction | um.UModuleMethod) {
+function mdClass(cls: um.UModuleClass) {
 	let md = '';
-	for (const s of fn.overloads) {
-		const sCode = (('kind' in fn) ? fn.kind + ' ' : '') + codeMethod(fn, s);
-		md += (s.doc ? s.doc + DNLINE : '') + mdCode(sCode) + DNLINE;
-		if (s.typeParameters?.length) {
-			md += '### Type Parameters' + DNLINE;
+	md += mdCode(codeInterfaceLike(cls)) + DNLINE + mdDoc(cls.doc, DNLINE);
+	md += mdTypeParameter(cls.typeParameters);
 
-			for (const param of s.typeParameters) {
-				md += '- `' + codeTypeParameter(param) + '`' + NLINE
-					+ (param.doc ? param.doc + NLINE : '');
-			}
-			md += NLINE;
+	if (cls.constructors.length) {
+		md += '### Constructors' + DNLINE;
+		md += mdSignatures(cls.constructors, 'constructor', 4, false, false);
+	}
+
+	if (cls.properties.size || cls.staticMembers.properties.size) {
+		md += '### Properties' + DNLINE;
+		if (cls.properties.size) {
+			md += mdProperties(cls.properties);
+		}
+		if (cls.staticMembers.properties.size) {
+			md += mdProperties(cls.staticMembers.properties, !cls.properties.size, true);
+		}
+		md += NLINE;
+	}
+
+	if (cls.methods.size) {
+		md += mdMethods(cls.methods);
+		md += mdMethods(cls.staticMembers.methods, true);
+	}
+
+	return md;
+}
+
+function mdSignatures(fn: um.UModuleSignature[], name: string, hLevel = 3, returnType = true, typeParams = true) {
+	let md = '';
+	const hTags = '#'.repeat(hLevel) + ' ';
+
+	for (const s of fn) {
+		if (md.length) {
+			md += '---' + DNLINE;
+		}
+
+		md += mdCode(name + codeSignature(s, returnType, typeParams)) + DNLINE + mdDoc(s.doc, DNLINE);
+		if (typeParams) {
+			md += mdTypeParameter(s.typeParameters);
 		}
 
 		if (s.parameters.length) {
-			md += '### Parameters' + DNLINE;
+			md += hTags + 'Parameters' + DNLINE;
 
 			for (const param of s.parameters) {
-				md += '- `' + codeParameter(param) + '`' + NLINE
-					+ (param.doc ? param.doc + NLINE : '');
+				md += '- `' + codeParameter(param) + '`' + NLINE + mdDoc(param.doc);
 			}
 			md += NLINE;
 		}
 
-		if (s.returnType !== 'void') {
-			md += '### Return `' + `${s.returnType}` + '`' + (s.returnDoc ? NLINE + s.returnDoc : '') + DNLINE;
+		if (returnType && s.returnType !== 'void') {
+			md += hTags + 'Return `' + `${s.returnType}` + '`' + (s.returnDoc ? NLINE + s.returnDoc : '') + DNLINE;
 		}
 	}
 
 	return md;
+}
+
+const STATIC_BADGE = '<span class="badge badge-outline badge-static">static</span>';
+
+function mdProperties(props: um.UModuleTypeMembers['properties'], th = true, pStatic = false) {
+	let md = th ?
+		'| Name | Type | Description |' + NLINE +
+		'| ---- | ---- | ----------- |' + NLINE : '';
+
+	for (const [name, prop] of props) {
+		md += `| ${name} ${pStatic ? STATIC_BADGE + ' ' : ''}`;
+		if (prop.kind === 'accessor') {
+			md += `| \`${prop.type}\` `;
+			md += '| ' +
+				(prop.get ? mdPropDoc(prop.get, 'get') : '') +
+				(prop.set ? (prop.get ? '<br />' : '') + mdPropDoc(prop.set, 'set') : '') + ' |' + NLINE;
+		} else {
+			md += `| \`${prop.type}\` `;
+			md += `| ${mdPropDoc(prop, 'field')} |` + NLINE;
+		}
+	}
+
+	return md;
+}
+
+function mdMethods(methods: um.UModuleTypeMembers['methods'], pStatic = false) {
+	let md = '';
+
+	for (const [name, method] of methods) {
+		const amBadge = mdAccessModifierBadge(method.accessModifier);
+		md += `### ${name} ${pStatic ? STATIC_BADGE + ' ' : ''}<span class="badge badge-method">method</span>${amBadge ? ' ' + amBadge : ''}` + DNLINE;
+		md += mdSignatures(method.overloads, method.name, 4);
+	}
+	return md;
+}
+
+function mdTypeParameter(params: um.UModuleTypeParameter[] | undefined, hLevel = 3) {
+	let md = '';
+
+	if (params?.length) {
+		md += '#'.repeat(hLevel) + ' Type Parameters' + DNLINE;
+		for (const param of params) {
+			md += '- `' + codeTypeParameter(param) + '`' + NLINE + mdDoc(param.doc);
+		}
+		md += NLINE;
+	}
+
+	return md;
+}
+
+function mdPropDoc(prop: { doc: string; readonly?: boolean; optional?: boolean; accessModifier?: um.UModuleTypeMember['accessModifier'] }, kind: 'field' | 'get' | 'set') {
+	const amBadge = mdAccessModifierBadge(prop.accessModifier);
+	let md = `<span class="badge badge-${kind}">${kind}</span>${amBadge ? ' ' + amBadge : ''}`;
+
+	if (prop.readonly) {
+		md += ` <span class="badge badge-readonly">readonly</span>`;
+	}
+	if (prop.optional) {
+		md += ` <span class="badge badge-optional">optional</span>`;
+	}
+
+	return md + (prop.doc ? ' ' + prop.doc.replace(/\r?\n/g, ' ') : '');
+}
+
+function mdAccessModifierBadge(accessModifier: um.UModuleTypeMember['accessModifier']) {
+	return accessModifier && accessModifier !== 'public'
+		? `<span class="badge badge-${accessModifier}">${accessModifier}</span>`
+		: '';
 }
 
 function mdCode(code: string) {
 	return '```ts' + NLINE + code + NLINE + '```';
 }
 
-function codeMethod(fn: um.UModuleMethod, call: um.UModuleSignature) {
-	return fn.name + codeSignature(call);
+function mdDoc(doc: string, line = NLINE) {
+	return doc ? doc + line : '';
 }
 
-function codeSignature(call: um.UModuleSignature) {
-	return codeTypeParameters(call.typeParameters) + codeParameters(call.parameters) + `: ${call.returnType}`;
+function codeInterfaceLike(cls: um.UModuleInterfaceLike) {
+	return `${cls.kind} ${cls.name}${codeTypeParameters(cls.typeParameters)}`;
+}
+
+function codeSignature(call: um.UModuleSignature, returnType: boolean, typeParams = true) {
+	return (typeParams ? codeTypeParameters(call.typeParameters) : '') + codeParameters(call.parameters) + (returnType ? `: ${call.returnType}` : '');
 }
 
 function codeParameters(params: um.UModuleParameter[]) {
