@@ -30,7 +30,7 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 			if (!exporterPlugin) {
 				throw new Error(`This plugin depends on the "${um.DocExporterPluginName}" plugin.`);
 			}
-			exporter = exporterPlugin.api;
+			exporter = exporterPlugin.api as um.DocExporterPluginAPI;
 		},
 
 		transform(code, id) {

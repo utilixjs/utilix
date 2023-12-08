@@ -1,5 +1,6 @@
 import path from 'path';
 import type { Plugin, ViteDevServer } from 'vite';
+//import { UDocExporter, type UModuleExports } from '@scripts/UDocExporter';
 import { UDocExporter, type UModuleExports } from '../../../packages/utilix/scripts/UDocExporter';
 
 class DocExporter {
@@ -92,7 +93,7 @@ export function docExporter(): Plugin<DocExporterPluginAPI> {
 				return exporter.getExports(module, watchModule);
 			}
 		}
-	}
+	};
 }
 
 export * from '../../../packages/utilix/scripts/UDocExporter';
