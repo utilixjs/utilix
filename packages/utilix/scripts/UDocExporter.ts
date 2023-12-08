@@ -17,7 +17,6 @@ export type UModuleParameterLike = UModuleNode & { default?: string; };
 export type UModuleParameter = UModuleParameterLike & { optional: boolean; };
 export type UModuleTypeParameter = UModuleParameterLike & { constraint?: string; };
 export type UModuleGenericable = { typeParameters?: UModuleTypeParameter[]; }
-export type UModuleClassMember = { accessModifier: 'public' | 'protected' | 'private'; }
 
 export interface UModuleSignature extends Pick<UModuleNode, 'doc'>, UModuleGenericable {
 	parameters: UModuleParameter[];
@@ -25,41 +24,43 @@ export interface UModuleSignature extends Pick<UModuleNode, 'doc'>, UModuleGener
 	returnDoc: string;
 }
 
-interface UModuleField extends UModuleNode {
+export interface UModuleFunctionLike extends UModuleNode {
+	overloads: UModuleSignature[];
+}
+
+export type UModuleTypeMember = UModuleNode & { accessModifier?: 'public' | 'protected' | 'private'; };
+
+export interface UModuleField extends UModuleTypeMember {
 	kind: 'field';
 	readonly: boolean;
 	optional: boolean;
 }
 
-export interface UModulePropertyAccessor {
+export interface UModulePropertyAccessor extends Omit<UModuleTypeMember, 'doc' | 'accessModifier'> {
 	kind: 'accessor';
-	get?: UModuleNode;
-	set?: UModuleNode;
+	get?: Pick<UModuleTypeMember, 'doc' | 'accessModifier'>;
+	set?: Pick<UModuleTypeMember, 'doc' | 'accessModifier'>;
 }
 
 export type UModuleProperty = UModuleField | UModulePropertyAccessor;
+export type UModuleMethod = UModuleFunctionLike & UModuleTypeMember;
 
-export interface UModuleMethod extends UModuleNode {
-	overloads: UModuleSignature[];
-}
 
-export interface UModuleTypeMembers<TProp extends UModuleProperty = UModuleProperty,
-	TMethod extends UModuleMethod = UModuleMethod> {
-	properties: Map<string, TProp>;
-	methods: Map<string, TMethod>;
+export interface UModuleTypeMembers {
+	properties: Map<string, UModuleProperty>;
+	methods: Map<string, UModuleMethod>;
 }
 
 export interface UModuleInterfaceLike<
-	TKind extends 'class' | 'interface' = 'class' | 'interface',
-	TProp extends UModuleProperty = UModuleProperty,
-	TMethod extends UModuleMethod = UModuleMethod> extends UModuleNode, UModuleTypeMembers<TProp, TMethod>, UModuleGenericable {
+	TKind extends 'class' | 'interface' = 'class' | 'interface'>
+	extends UModuleNode, UModuleTypeMembers, UModuleGenericable {
 	kind: TKind;
 	baseTypes?: string[];
 }
 
-export interface UModuleClass extends UModuleInterfaceLike<'class', UModuleProperty & UModuleClassMember, UModuleMethod & UModuleClassMember> {
+export interface UModuleClass extends UModuleInterfaceLike<'class'> {
 	constructors: UModuleSignature[];
-	staticMembers: UModuleTypeMembers<UModuleProperty & UModuleClassMember, UModuleMethod & UModuleClassMember>;
+	staticMembers: UModuleTypeMembers;
 }
 
 export type UModuleInterface = UModuleInterfaceLike<'interface'>;
@@ -68,7 +69,7 @@ export interface UModuleTypeAlias extends UModuleNode, UModuleGenericable {
 	kind: 'type';
 }
 
-export interface UModuleFunction extends UModuleNode, UModuleMethod {
+export interface UModuleFunction extends UModuleNode, UModuleFunctionLike {
 	kind: 'function';
 }
 
@@ -166,7 +167,7 @@ export class UDocExporter {
 			//exports[expKey.toString()] = this.serializeExport(expSymbol, declaration);
 		});
 
-		if (watchCallback && this.watchModules) {
+		if (this.watchModules && watchCallback) {
 			this.watchModules.set(srcFile.fileName, {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 				version: (srcFile as any).version,
@@ -195,7 +196,7 @@ export class UDocExporter {
 			this.serializeInterfaceLike(symbol, exp as UModuleInterfaceLike);
 		} else if (ts.isTypeAliasDeclaration(declaration)) {
 			exp.kind = 'type';
-			this.serializeTypeAlias(symbol, exp as UModuleTypeAlias);
+			this.serializeTypeAlias(declaration, exp as UModuleTypeAlias);
 		}
 
 		return exp;
@@ -223,10 +224,9 @@ export class UDocExporter {
 		this.serializeTypeMembers(type, exp);
 	}
 
-	private serializeTypeAlias(symbol: ts.Symbol, exp: UModuleTypeAlias) {
-		const typeDeclaration = symbol.declarations![0] as ts.TypeAliasDeclaration;
-		exp.type = typeDeclaration.type.getText();
-		exp.typeParameters = typeDeclaration.typeParameters?.map(p => this.serializeTypeParameterDeclaration(p));
+	private serializeTypeAlias(declaration: ts.TypeAliasDeclaration, exp: UModuleTypeAlias) {
+		exp.type = declaration.type.getText();
+		exp.typeParameters = declaration.typeParameters?.map(p => this.serializeTypeParameterDeclaration(p));
 	}
 
 	private serializeTypeMembers(type: ts.Type, members: Partial<UModuleTypeMembers>) {
@@ -244,8 +244,7 @@ export class UDocExporter {
 			const mNode = this.serializeSymbol(mSymbol);
 
 			if (type.isClass()) {
-				(mNode as UModuleClassMember & UModuleNode).accessModifier = tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Private) ? 'private'
-					: tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Protected) ? 'protected' : 'public';
+				(mNode as UModuleTypeMember).accessModifier = this.serializeAccessModifier(declaration);
 			}
 
 			if (ts.isPropertyDeclaration(declaration) || ts.isPropertySignature(declaration)) {
@@ -257,38 +256,41 @@ export class UDocExporter {
 				members.properties.set(mNode.name, prop);
 				//members.properties[mNode.name] = prop;
 			} else if (ts.isAccessor(declaration)) {
-				let prop: UModuleProperty;
-				if (members.properties.has(mNode.name)) {
-					//if (members.properties[mNode.name]) {
-					prop = members.properties.get(mNode.name)!;
-					//prop = members.properties[mNode.name];
-					if (prop.kind !== 'accessor') {
-						continue;
+				const prop: UModuleProperty = { kind: 'accessor', name: mNode.name, type: mNode.type };
+				for (const dec of mSymbol.declarations!) {
+					const signature = this.checker.getSignatureFromDeclaration(dec as ts.AccessorDeclaration)!;
+					const accessor: UModulePropertyAccessor['get'] = {
+						doc: ts.displayPartsToString(signature.getDocumentationComment(this.checker))
+					};
+					if (type.isClass()) {
+						accessor.accessModifier = this.serializeAccessModifier(dec);
 					}
-				} else {
-					prop = { kind: 'accessor' };
-					members.properties.set(mNode.name, prop);
-					//members.properties[mNode.name] = prop;
+					prop[dec.kind === ts.SyntaxKind.SetAccessor ? 'set' : 'get'] = accessor;
 				}
 
-				prop[declaration.kind === ts.SyntaxKind.SetAccessor ? 'set' : 'get'] = mNode;
+				members.properties.set(mNode.name, prop);
 			} else if (ts.isMethodDeclaration(declaration) || ts.isMethodSignature(declaration)) {
 				//if (members.methods[mNode.name]) {
 				if (members.methods.has(mNode.name)) {
 					continue;
 				}
 
-				members.methods.set(mNode.name, this.serializeMethodFromSymbol(mSymbol, mNode as UModuleMethod, declaration));
+				members.methods.set(mNode.name, this.serializeMethodFromSymbol(mSymbol, mNode as UModuleFunctionLike, declaration));
 				//members.methods[mNode.name] = this.serializeMethodFromSymbol(mSymbol, mNode as UModuleMethod, declaration);
 			}
 		}
 	}
 
-	private serializeMethodFromSymbol(symbol: ts.Symbol, method: UModuleMethod, declaration = symbol.valueDeclaration!) {
+	private serializeAccessModifier(declaration: ts.Declaration) {
+		return tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Private) ? 'private'
+			: tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Protected) ? 'protected' : 'public';
+	}
+
+	private serializeMethodFromSymbol(symbol: ts.Symbol, method: UModuleFunctionLike, declaration = symbol.valueDeclaration!) {
 		return this.serializeMethod(this.checker.getTypeOfSymbolAtLocation(symbol, declaration), method);
 	}
 
-	private serializeMethod(type: ts.Type, method: UModuleMethod) {
+	private serializeMethod(type: ts.Type, method: UModuleFunctionLike) {
 		method.overloads = type.getCallSignatures().map(c => this.serializeSignature(c));
 		return method;
 	}
