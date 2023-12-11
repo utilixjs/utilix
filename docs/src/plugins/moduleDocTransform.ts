@@ -50,15 +50,21 @@ function mdExports(exps: um.UModuleExports, main: string) {
 		md += mdExport(main, exps.get(main)!);
 	}
 
+	let mdTypes = '';
+
 	for (const [name, exp] of exps) {
 		if (name === main) {
 			continue;
 		}
 
-		md += mdExport(name, exp);
+		if (exp.kind === 'interface' || exp.kind === 'type') {
+			mdTypes += mdExport(name, exp);
+		} else {
+			md += mdExport(name, exp);
+		}
 	}
 
-	return md;
+	return md + mdTypes;
 }
 
 function mdExport(name: string, exp: um.UModuleExport) {
@@ -67,35 +73,43 @@ function mdExport(name: string, exp: um.UModuleExport) {
 	if (exp.kind === 'function') {
 		md += mdSignatures(exp.overloads, `${exp.kind} ${exp.name}`);
 	} else if (exp.kind === 'class') {
-		md += mdClass(exp);
+		md += mdClassLike(exp);
+	} else if (exp.kind === 'interface') {
+		md += mdClassLike(exp);
 	}
 
 	return md;
 }
 
-function mdClass(cls: um.UModuleClass) {
+function mdClassLike(cls: um.UModuleClass | um.UModuleInterface) {
 	let md = '';
 	md += mdCode(codeInterfaceLike(cls)) + DNLINE + mdDoc(cls.doc, DNLINE);
 	md += mdTypeParameter(cls.typeParameters);
 
-	if (cls.constructors.length) {
-		md += '### Constructors' + DNLINE;
-		md += mdSignatures(cls.constructors, 'constructor', 4, false, false);
+	const isClass = cls.kind === 'class';
+	if (isClass) {
+		if (cls.constructors.length) {
+			md += '### Constructors' + DNLINE;
+			md += mdSignatures(cls.constructors, 'constructor', 4, false, false);
+		}
 	}
 
-	if (cls.properties.size || cls.staticMembers.properties.size) {
+
+	if (cls.properties.size || (isClass && cls.staticMembers.properties.size)) {
 		md += '### Properties' + DNLINE;
 		if (cls.properties.size) {
 			md += mdProperties(cls.properties);
 		}
-		if (cls.staticMembers.properties.size) {
-			md += mdProperties(cls.staticMembers.properties, !cls.properties.size, true);
+		if (isClass && cls.staticMembers.properties.size) {
+			md += mdProperties(cls.staticMembers?.properties, !cls.properties.size, true);
 		}
 		md += NLINE;
 	}
 
 	if (cls.methods.size) {
 		md += mdMethods(cls.methods);
+	}
+	if (isClass && cls.staticMembers.methods.size) {
 		md += mdMethods(cls.staticMembers.methods, true);
 	}
 
@@ -143,13 +157,13 @@ function mdProperties(props: um.UModuleTypeMembers['properties'], th = true, pSt
 	for (const [name, prop] of props) {
 		md += `| ${name} ${pStatic ? STATIC_BADGE + ' ' : ''}`;
 		if (prop.kind === 'accessor') {
-			md += `| \`${prop.type}\` `;
-			md += '| ' +
+			md += `| \`${mdTableCell(prop.type)}\` `;
+			md += '| ' + mdTableCell(
 				(prop.get ? mdPropDoc(prop.get, 'get') : '') +
-				(prop.set ? (prop.get ? '<br />' : '') + mdPropDoc(prop.set, 'set') : '') + ' |' + NLINE;
+				(prop.set ? (prop.get ? '<br />' : '') + mdPropDoc(prop.set, 'set') : '')) + ' |' + NLINE;
 		} else {
-			md += `| \`${prop.type}\` `;
-			md += `| ${mdPropDoc(prop, 'field')} |` + NLINE;
+			md += `| \`${mdTableCell(prop.type)}\` `;
+			md += `| ${mdTableCell(mdPropDoc(prop))} |` + NLINE;
 		}
 	}
 
@@ -181,9 +195,13 @@ function mdTypeParameter(params: um.UModuleTypeParameter[] | undefined, hLevel =
 	return md;
 }
 
-function mdPropDoc(prop: { doc: string; readonly?: boolean; optional?: boolean; accessModifier?: um.UModuleTypeMember['accessModifier'] }, kind: 'field' | 'get' | 'set') {
+function mdTableCell(content: string) {
+	return content.replace(/\|/g, '\\|');
+}
+
+function mdPropDoc(prop: { doc: string; readonly?: boolean; optional?: boolean; accessModifier?: um.UModuleTypeMember['accessModifier'] }, kind?: 'field' | 'get' | 'set') {
 	const amBadge = mdAccessModifierBadge(prop.accessModifier);
-	let md = `<span class="badge badge-${kind}">${kind}</span>${amBadge ? ' ' + amBadge : ''}`;
+	let md = (kind ? `<span class="badge badge-${kind}">${kind}</span>` : '') + (amBadge ? ' ' + amBadge : '');
 
 	if (prop.readonly) {
 		md += ` <span class="badge badge-readonly">readonly</span>`;
@@ -218,7 +236,7 @@ function codeSignature(call: um.UModuleSignature, returnType: boolean, typeParam
 }
 
 function codeParameters(params: um.UModuleParameter[]) {
-	return params.length ? `(${params.map(codeParameter).join(', ')})` : '';
+	return `(${params.map(codeParameter).join(', ')})`;
 }
 
 function codeTypeParameters(params?: um.UModuleTypeParameter[]) {
