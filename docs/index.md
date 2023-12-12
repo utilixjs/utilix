@@ -9,10 +9,8 @@ hero:
     - theme: brand
       text: Get Started
       link: /guide/
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-  image:
+
+image:
     src: /media/logo/u4t.png
     alt: Utilix
 
