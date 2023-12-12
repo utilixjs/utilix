@@ -55,7 +55,10 @@ export interface UModuleInterfaceLike<
 	TKind extends 'class' | 'interface' = 'class' | 'interface'>
 	extends UModuleNode, UModuleTypeMembers, UModuleGenericable {
 	kind: TKind;
-	baseTypes?: string[];
+	baseTypes?: {
+		extends?: string[];
+		implements?: string[];
+	};
 }
 
 export interface UModuleClass extends UModuleInterfaceLike<'class'> {
@@ -187,13 +190,13 @@ export class UDocExporter {
 
 		if (ts.isClassDeclaration(declaration)) {
 			exp.kind = 'class';
-			this.serializeInterfaceLike(symbol, exp as UModuleInterfaceLike);
+			this.serializeInterfaceLike(symbol, exp as UModuleInterfaceLike, declaration);
 		} else if (ts.isFunctionDeclaration(declaration)) {
 			exp.kind = 'function';
 			this.serializeMethodFromSymbol(symbol, exp as UModuleFunction);
 		} else if (ts.isInterfaceDeclaration(declaration)) {
 			exp.kind = 'interface';
-			this.serializeInterfaceLike(symbol, exp as UModuleInterfaceLike);
+			this.serializeInterfaceLike(symbol, exp as UModuleInterfaceLike, declaration);
 		} else if (ts.isTypeAliasDeclaration(declaration)) {
 			exp.kind = 'type';
 			this.serializeTypeAlias(declaration, exp as UModuleTypeAlias);
@@ -202,7 +205,7 @@ export class UDocExporter {
 		return exp;
 	}
 
-	private serializeInterfaceLike(symbol: ts.Symbol, exp: UModuleInterfaceLike) {
+	private serializeInterfaceLike(symbol: ts.Symbol, exp: UModuleInterfaceLike, declaration: ts.InterfaceDeclaration | ts.ClassLikeDeclaration) {
 		const type = this.checker.getDeclaredTypeOfSymbol(symbol);
 		if (!type.isClassOrInterface()) {
 			console.warn('isClassOrInterface false for', symbol.getName());
@@ -210,10 +213,22 @@ export class UDocExporter {
 		}
 
 		exp.typeParameters = type.typeParameters?.map(p => this.serializeTypeParameter(p));
-		exp.baseTypes = type.getBaseTypes()?.map(baseType => this.checker.typeToString(baseType));
+
+		if (declaration.heritageClauses) {
+			exp.baseTypes = {};
+			for (const heritage of declaration.heritageClauses) {
+				const baseTypes = (heritage.token === ts.SyntaxKind.ExtendsKeyword)
+					? (exp.baseTypes.extends ??= [])
+					: (exp.baseTypes.implements ??= []);
+
+				for (const bType of heritage.types) {
+					baseTypes.push(this.checker.typeToString(this.checker.getTypeFromTypeNode(bType)));
+				}
+			}
+		}
 
 		if (type.isClass()) {
-			const classType = this.checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!);
+			const classType = this.checker.getTypeOfSymbolAtLocation(symbol, declaration);
 			const expClass = exp as UModuleClass;
 
 			expClass.constructors = classType.getConstructSignatures().map(c => this.serializeSignature(c));

@@ -236,7 +236,9 @@ function mdDoc(doc: string, line = NLINE) {
 }
 
 function codeInterfaceLike(cls: um.UModuleInterfaceLike) {
-	return `${cls.kind} ${cls.name}${codeTypeParameters(cls.typeParameters)}`;
+	return `${cls.kind} ${cls.name}${codeTypeParameters(cls.typeParameters)}` +
+		((cls.baseTypes?.extends?.length) ? ' extends ' + cls.baseTypes.extends.join(', ') : '') +
+		((cls.baseTypes?.implements?.length) ? ' implements ' + cls.baseTypes.implements.join(', ') : '');
 }
 
 function codeSignature(call: um.UModuleSignature, returnType: boolean, typeParams = true) {

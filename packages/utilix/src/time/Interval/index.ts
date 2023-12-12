@@ -2,7 +2,7 @@ import type { Action } from "@/types";
 import { isNumber } from "@/basics/isNumber";
 
 /**
- * Interface that represent an interval.
+ * Interface that represent a repeated calls of a function.
  */
 export interface IInterval {
 	/** Delay in milliseconds. */
