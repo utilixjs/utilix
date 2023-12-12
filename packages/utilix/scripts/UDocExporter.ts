@@ -14,7 +14,7 @@ export type UModuleExport = UModuleClass | UModuleInterface | UModuleFunction | 
 export type UModuleExports = Map<string, UModuleExport>;
 
 export type UModuleParameterLike = UModuleNode & { default?: string; };
-export type UModuleParameter = UModuleParameterLike & { optional: boolean; };
+export type UModuleParameter = UModuleParameterLike & { optional: boolean; restParams: boolean };
 export type UModuleTypeParameter = UModuleParameterLike & { constraint?: string; };
 export type UModuleGenericable = { typeParameters?: UModuleTypeParameter[]; }
 
@@ -312,6 +312,7 @@ export class UDocExporter {
 
 				param.optional = !!declaration.questionToken;
 				param.default = declaration.initializer?.getText();
+				param.restParams = !!declaration.dotDotDotToken;
 
 				return param;
 			}),

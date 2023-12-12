@@ -6,6 +6,7 @@ const DNLINE = NLINE + NLINE;
 
 export const UModulePathRegex = /packages\/utilix\/src\/(\w+\/\w+)\/index\.md$/;
 export const DocTransformPluginName = 'utilix-ModuleDocTransform';
+
 export interface DocTransformPluginAPI {
 	transform(code: string, module: string, watchModule?: string): string;
 }
@@ -199,7 +200,14 @@ function mdTableCell(content: string) {
 	return content.replace(/\|/g, '\\|');
 }
 
-function mdPropDoc(prop: { doc: string; readonly?: boolean; optional?: boolean; accessModifier?: um.UModuleTypeMember['accessModifier'] }, kind?: 'field' | 'get' | 'set') {
+type UProp = {
+	doc: string;
+	readonly?: boolean;
+	optional?: boolean;
+	accessModifier?: um.UModuleTypeMember['accessModifier'];
+};
+
+function mdPropDoc(prop: UProp, kind?: 'field' | 'get' | 'set') {
 	const amBadge = mdAccessModifierBadge(prop.accessModifier);
 	let md = (kind ? `<span class="badge badge-${kind}">${kind}</span>` : '') + (amBadge ? ' ' + amBadge : '');
 
@@ -244,7 +252,7 @@ function codeTypeParameters(params?: um.UModuleTypeParameter[]) {
 }
 
 function codeParameter(p: um.UModuleParameter) {
-	return `${p.name}${p.optional ? '?' : ''}: ${p.type}${codeParameterDefault(p)}`;
+	return (p.restParams ? '...' : '') + `${p.name}${p.optional ? '?' : ''}: ${p.type}${codeParameterDefault(p)}`;
 }
 
 function codeTypeParameter(p: um.UModuleTypeParameter) {
