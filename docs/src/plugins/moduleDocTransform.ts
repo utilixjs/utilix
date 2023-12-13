@@ -77,6 +77,8 @@ function mdExport(name: string, exp: um.UModuleExport) {
 		md += mdClassLike(exp);
 	} else if (exp.kind === 'interface') {
 		md += mdClassLike(exp);
+	} else if (exp.kind === 'type') {
+		md += mdTypeAlias(exp);
 	}
 
 	return md;
@@ -144,6 +146,14 @@ function mdSignatures(fn: um.UModuleSignature[], name: string, hLevel = 3, retur
 			md += hTags + 'Return `' + `${s.returnType}` + '`' + (s.returnDoc ? NLINE + s.returnDoc : '') + DNLINE;
 		}
 	}
+
+	return md;
+}
+
+function mdTypeAlias(type: um.UModuleTypeAlias) {
+	let md = '';
+	md += mdCode(codeTypeAlias(type)) + DNLINE + mdDoc(type.doc, DNLINE);
+	md += mdTypeParameter(type.typeParameters);
 
 	return md;
 }
@@ -239,6 +249,10 @@ function codeInterfaceLike(cls: um.UModuleInterfaceLike) {
 	return `${cls.kind} ${cls.name}${codeTypeParameters(cls.typeParameters)}` +
 		((cls.baseTypes?.extends?.length) ? ' extends ' + cls.baseTypes.extends.join(', ') : '') +
 		((cls.baseTypes?.implements?.length) ? ' implements ' + cls.baseTypes.implements.join(', ') : '');
+}
+
+function codeTypeAlias(type: um.UModuleTypeAlias) {
+	return `${type.kind} ${type.name}${codeTypeParameters(type.typeParameters)} = ${type.type}`;
 }
 
 function codeSignature(call: um.UModuleSignature, returnType: boolean, typeParams = true) {
