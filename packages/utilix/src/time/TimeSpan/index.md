@@ -2,6 +2,60 @@
 
 Object that represents a time interval (duration of time or elapsed time) that is measured as a positive or negative number of days, hours, minutes, seconds, and fractions of a second. 
 
+## Usage
+
+### Basic
+
+```ts
+import { TimeSpan } from 'utilix';
+
+// initializes with the total number of milliseconds
+const time = new TimeSpan(44711000);
+
+console.log(time.hours);   // 12
+console.log(time.minutes); // 25
+console.log(time.seconds); // 11
+
+// initializes with specified number of hours, minutes, and seconds
+console.log((new TimeSpan(2, 99, 18)).toString()); // 03:39:18
+```
+
+### From time unit
+
+```ts
+import { TimeSpan } from 'utilix';
+
+console.log(TimeSpan.fromDays(1.23456).toString());    // 1.05:37:45.984
+console.log(TimeSpan.fromHours(0.2539).toString());    // 00:15:14.040
+console.log(TimeSpan.fromMinutes(60).toString());      // 01:00:00
+console.log(TimeSpan.fromSeconds(32.157).toString());  // 00:00:32.157
+```
+
+### Parse
+
+```ts
+import { TimeSpan } from 'utilix';
+
+console.log(TimeSpan.parse('54864').toString('s.ff'));   // 54.86
+console.log(TimeSpan.parse('77:88:99.100').toString());  // 3.06:29:39.100
+console.log(TimeSpan.parse('498.57s').toString());       // 00:08:18.570
+console.log(TimeSpan.parse('1:1').toString());           // 00:01:01
+console.log(TimeSpan.parse('-24.3d').toString());        // -24.07:12:00
+```
+
+### Getter function
+
+```ts
+import { TimeSpan } from "utilix";
+
+const initTime = Date.now();
+const upTime =  new TimeSpan(() => Date.now() - initTime);
+
+setInterval(() => {
+	console.log("Up time:", upTime.toString());
+}, 1000);
+```
+
 ## Format
 
 You can use the `formatted` property or `toString` function to get formatted time interval according to the string of tokens passed in (`-[d\.]hh:mm:ss[\.fff]` by default).
@@ -14,7 +68,7 @@ console.log(time.toString('m:ss')); // 4:11
 ```
 
 ::: tip
-You can use the `[]` token in the format string to conditionally print time unit only when the absolute value of the total number (except for seconds fractions which in this case the value itself) is not zero, you can also add suffix and/or prefix but it should be with literal string delimiter `''` or escape character `\`.
+The `[]` token can be used in the format string to conditionally print time unit only when the absolute value of the total number (except for seconds fractions which in this case the value itself) is not zero, you can also add suffix and/or prefix but it should be with literal string delimiter `''` or escape character `\`.
 
 ```ts
 const time = new TimeSpan(518651000);
