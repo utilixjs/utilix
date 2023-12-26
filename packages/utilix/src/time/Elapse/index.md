@@ -2,9 +2,6 @@
 
 Calculates and tracks the elapsed time, to create a customizable timer that can be started, paused, resumed, and stopped. It’s useful for tracking elapsed time in applications where you need to manage time-based events.
 
-- `resume()`: Resumes the elapse timer.
-- `stop()`: Stops the elapse timer.
-
 ## Usage
 
 ```ts

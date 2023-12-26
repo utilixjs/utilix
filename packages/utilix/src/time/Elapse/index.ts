@@ -51,10 +51,10 @@ export class Elapse {
 
 	/** The elapsed time. */
 	get time() {
-		const t = this._acum + (this._interval.isActive ? this._now() - this._lsTime : 0);
+		const t = this._acum + (this._interval.isActive ? (this._now() - this._lsTime) : 0);
 		const d = this._interval.delay;
 
-		return d ? t - (t * d) : t;
+		return d ? t - (t % d) : t;
 	}
 
 	private reset() {
