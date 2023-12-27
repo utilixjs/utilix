@@ -23,7 +23,7 @@ console.log('src:', srcDir);
 async function mapModules<T>(dir: string, mapper: (module: Mutable<UModule>, i: number, l: number) => Awaitable<T | void>) {
 	const modules: T[] = [];
 	const dirs = (await fs.readdir(dir, { withFileTypes: true }))
-		.filter(d => d.isDirectory() && !d.name.startsWith('.'));
+		.filter(d => d.isDirectory() && !(d.name.startsWith('.') || d.name.startsWith('_')));
 
 	for (let i = 0, l = dirs.length; i < l; i++) {
 		const m = dirs[i];

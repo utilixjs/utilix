@@ -4,8 +4,8 @@
 		"outDir": "dist",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@internal/*": ["./src/.internal/*"],
+			"@internal/*": ["./src/_internal/*"],
 		}
 	},
-	"include": ["src", "src/.internal/**/*"]
+	"include": ["src"]
 }
