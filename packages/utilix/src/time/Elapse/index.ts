@@ -1,5 +1,5 @@
-import { noop } from "@/utils";
-import { IInterval, Interval, IntervalOptions } from "../Interval";
+import { noop } from "@/utils/noop";
+import { type IInterval, type IntervalOptions, Interval } from "../Interval";
 
 /**
  * The state of the Elapse instance.
@@ -34,13 +34,20 @@ export class Elapse {
 	 * @param options The options for the elapse timer.
 	 */
 	constructor(options: ElapseOptions = {}) {
-		this._now = options.timestamp ?? Date.now;
+		const {
+			onTick,
+			timestamp = Date.now,
+			interval
+		} = options;
+
+		this._now = timestamp;
 		this._lsTime = this._now();
 
-		const cb = options.onTick;
-		this._interval = new Interval(cb ? () => {
-			cb(this.time);
-		} : noop, options.interval);
+		const cb = onTick ? () => {
+			onTick(this.time);
+		} : noop;
+
+		this._interval = new Interval(cb, interval);
 	}
 
 	/** The current state of the elapse timer. */
@@ -69,6 +76,9 @@ export class Elapse {
 
 	/** Pauses the elapse timer. */
 	pause() {
+		if (!this._interval.isActive)
+			return;
+
 		this._interval.pause();
 		const tn = this._now();
 		this._acum += (tn - this._lsTime);
