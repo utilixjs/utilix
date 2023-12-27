@@ -15,12 +15,30 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 	let exporter: um.DocExporterPluginAPI;
 
 	function transform(code: string, module: string, watchModule?: string) {
-		const codeIndex = code.indexOf('## ');
-		const md = mdExports(exporter.getExports(module, watchModule), module.slice(module.indexOf('/') + 1));
+		let mainMd = '', usageMd = '', extMd = '';
 
-		return (codeIndex > 0)
-			? code.slice(0, codeIndex) + md + code.slice(codeIndex)
-			: code + NLINE + md;
+		const codeIndex = code.indexOf('## ');
+		if (codeIndex >= 0) {
+			mainMd =  code.slice(0, codeIndex);
+			extMd = code.slice(codeIndex);
+
+			const usageIdx = extMd.indexOf("## Usage");
+			if (usageIdx >= 0) {
+				const usageLastIdx = extMd.indexOf("\n## ", usageIdx + 1);
+				if (usageLastIdx >= 0) {
+					usageMd = extMd.slice(0, usageLastIdx);
+					extMd = extMd.slice(usageLastIdx);
+				} else {
+					usageMd = extMd;
+					extMd = '';
+				}
+			}
+		} else {
+			mainMd = code + NLINE;
+		}
+
+		const md = mdExports(exporter.getExports(module, watchModule), module.slice(module.indexOf('/') + 1));
+		return mainMd + usageMd + md + extMd;
 	}
 
 	return {
