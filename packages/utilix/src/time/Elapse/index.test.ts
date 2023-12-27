@@ -17,12 +17,26 @@ describe('Elapse', () => {
 		expect(timer.time).toBe(2000);
 
 		timer.pause();
-		vi.advanceTimersByTime(2011);
+		vi.advanceTimersByTime(10000);
 		expect(timer.time).toBe(2000);
 
 		timer.resume();
 		vi.advanceTimersByTime(3008);
 		expect(timer.time).toBe(5000);
+
+		timer.stop();
+		expect(timer.time).toBe(0);
+	});
+
+	it('should be able to start manually', () => {
+		const timer = new Elapse({ interval: { delay: 100, immediate: false } });
+
+		vi.advanceTimersByTime(10000);
+		expect(timer.time).toBe(0);
+
+		timer.start();
+		vi.advanceTimersByTime(1010);
+		expect(timer.time).toBe(1000);
 
 		timer.stop();
 		expect(timer.time).toBe(0);
