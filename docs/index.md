@@ -4,13 +4,12 @@ layout: home
 hero:
   name: "Utilix"
   text: "Modern & flexible utilities JS library"
-  tagline: Collection of essential functions & classes
+  tagline: Collection of essential modules
   actions:
     - theme: brand
       text: Get Started
       link: /guide/
-
-image:
+  image:
     src: /media/logo/u4t.png
     alt: Utilix
 
@@ -25,4 +24,3 @@ features:
     title: Modular & Strongly Typed
     details: Written in TypeScript, with ESM, CommonJS modules & bundled IIFE usable via CDN.
 ---
-
