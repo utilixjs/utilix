@@ -15,9 +15,6 @@ const elapse = new Elapse({
 	},
 });
 
-// Start the elapse timer
-elapse.start();
-
 // After some time, pause the elapse timer
 setTimeout(() => {
 	elapse.pause();
@@ -32,4 +29,18 @@ setTimeout(() => {
 setTimeout(() => {
 	elapse.stop();
 }, 15000);
+```
+
+### Manual start
+
+By default the elapse timer will start immediately, to disable this behavior, set the `interval.immediate` option to `false`:
+
+```ts
+const elapse = new Elapse({
+	interval: { delay: 1000, immediate: false },
+	// ...
+});
+
+// Start the elapse timer manually
+elapse.start();
 ```

@@ -1,5 +1,4 @@
 import { noop } from "@/utils";
-import type { Func, Action } from "@/types";
 import { IInterval, Interval, IntervalOptions } from "../Interval";
 
 /**
@@ -14,9 +13,9 @@ export interface ElapseOptions {
 	/** The interval or options for the interval. */
 	interval?: number | IntervalOptions;
 	/** Function that returns the current timestamp. */
-	timestamp?: Func<number>;
+	timestamp?: () => number;
 	/** Function to be called on each tick. */
-	onTick?: Action<[number]>;
+	onTick?: (time: number) => void;
 }
 
 /**
@@ -24,7 +23,7 @@ export interface ElapseOptions {
  */
 export class Elapse {
 	private readonly _interval: IInterval;
-	private readonly _now: Func<number>;
+	private readonly _now: () => number;
 
 	private _acum = 0;
 	private _lsTime: number;
@@ -51,7 +50,7 @@ export class Elapse {
 
 	/** The elapsed time. */
 	get time() {
-		const t = this._acum + (this._interval.isActive ? (this._now() - this._lsTime) : 0);
+		const t = this._acum + (this._interval.isActive ? this._now() - this._lsTime : 0);
 		const d = this._interval.delay;
 
 		return d ? t - (t % d) : t;
