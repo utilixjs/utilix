@@ -1,14 +1,12 @@
 {
 	"name": "utilix",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"type": "module",
 	"license": "MIT",
+	"homepage": "https://utilix.dev/",
 	"author": "Waleed Khaled <https://github.com/Waleed-KH>",
 	"description": "Modern and flexible utilities library for JavaScript",
-	"keywords": [
-		"utils",
-		"utilities"
-	],
+	"keywords": [ "util", "utils", "utilities", "modules" ],
 	"scripts": {
 		"build": "tsx ./scripts/build.ts",
 		"update": "tsx ./scripts/update.ts",
@@ -32,9 +30,7 @@
 			"require": "./dist/*/index.cjs"
 		}
 	},
-	"files": [
-		"dist"
-	],
+	"files": [ "dist" ],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/utilixjs/utilix.git"
