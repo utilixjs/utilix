@@ -16,6 +16,8 @@ export interface ElapseOptions {
 	timestamp?: () => number;
 	/** Function to be called on each tick. */
 	onTick?: (time: number) => void;
+	/** Adjust any drift in the elapsed time to the nearest multiple of the interval delay value if exist. */
+	driftAdjust?: boolean;
 }
 
 /**
@@ -24,6 +26,7 @@ export interface ElapseOptions {
 export class Elapse {
 	private readonly _interval: IInterval;
 	private readonly _now: () => number;
+	private readonly _driftAdjust: boolean;
 
 	private _acum = 0;
 	private _lsTime: number;
@@ -37,11 +40,13 @@ export class Elapse {
 		const {
 			onTick,
 			timestamp = Date.now,
-			interval
+			interval,
+			driftAdjust = true
 		} = options;
 
 		this._now = timestamp;
 		this._lsTime = this._now();
+		this._driftAdjust = driftAdjust;
 
 		const cb = onTick ? () => {
 			onTick(this.time);
@@ -60,7 +65,7 @@ export class Elapse {
 		const t = this._acum + (this._interval.isActive ? this._now() - this._lsTime : 0);
 		const d = this._interval.delay;
 
-		return d ? t - (t % d) : t;
+		return (this._driftAdjust && d) ? t - (t % d) : t;
 	}
 
 	private reset() {

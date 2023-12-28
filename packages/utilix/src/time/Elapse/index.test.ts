@@ -28,7 +28,7 @@ describe('Elapse', () => {
 		expect(timer.time).toBe(0);
 	});
 
-	it('should be able to start manually', () => {
+	it('should start manually', () => {
 		const timer = new Elapse({ interval: { delay: 100, immediate: false } });
 
 		vi.advanceTimersByTime(10000);
@@ -64,5 +64,23 @@ describe('Elapse', () => {
 		expect(callback).toBeCalledWith(300);
 
 		timer.stop();
+	});
+
+	it('should disable the drift adjustment behavior', () => {
+		const timer = new Elapse({ interval: 1000, driftAdjust: false });
+
+		vi.advanceTimersByTime(1027);
+		expect(timer.time).toBe(1027);
+
+		timer.pause();
+		vi.advanceTimersByTime(10000);
+		expect(timer.time).toBe(1027);
+
+		timer.resume();
+		vi.advanceTimersByTime(5142);
+		expect(timer.time).toBe(6169);
+
+		timer.stop();
+		expect(timer.time).toBe(0);
 	});
 });
