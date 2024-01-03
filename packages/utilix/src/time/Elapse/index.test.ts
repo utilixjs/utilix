@@ -83,4 +83,24 @@ describe('Elapse', () => {
 		timer.stop();
 		expect(timer.time).toBe(0);
 	});
+
+	it('should evaluate timer state correctly', () => {
+		const timer = new Elapse({ interval: { delay: 100, immediate: false } });
+
+		expect(timer.state).toBe('inactive');
+
+		timer.start();
+		vi.advanceTimersByTime(100);
+		expect(timer.state).toBe('active');
+
+		timer.pause();
+		expect(timer.state).toBe('paused');
+
+		timer.resume();
+		vi.advanceTimersByTime(100);
+		expect(timer.state).toBe('active');
+
+		timer.stop();
+		expect(timer.state).toBe('inactive');
+	});
 });
