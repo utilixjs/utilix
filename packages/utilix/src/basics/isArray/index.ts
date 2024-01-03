@@ -7,7 +7,7 @@
  * @returns `true` if value is an `Array`; otherwise, `false`. `false` is always returned if value is
  * a [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) instance.
  */
-export function isArray(value: unknown): value is unknown[] {
+export function isArray(value: unknown): value is any[] {
 	return Array.isArray(value);
 }
 
@@ -24,7 +24,7 @@ function isLength(value: unknown) {
  * @param value The value to check.
  * @returns `true` if value has a valid length, otherwise `false`.
  */
-export function isArrayLike(value: unknown): value is ArrayLike<unknown> {
+export function isArrayLike(value: unknown): value is ArrayLike<any> {
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return value != null && typeof value !== 'function' && isLength((value as any).length);
 }
