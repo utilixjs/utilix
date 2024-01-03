@@ -1,4 +1,5 @@
 import type { Action } from "@/types";
+import { setClearHandler } from '@/_internal/setClearHandler';
 import { isNumber } from "@/basics/isNumber";
 
 /**
@@ -35,9 +36,7 @@ export class Interval<TArgs extends any[] = []> implements IInterval {
 	private readonly _cb: Action<TArgs>;
 	private readonly _delay?: number;
 	private readonly _args: TArgs;
-
-	private _intervalId: ReturnType<typeof setInterval> | null = null;
-	private _isActive = false;
+	private readonly _handler = setClearHandler(setInterval<TArgs>, clearInterval);
 
 	/**
 	 * Creates a new Interval.
@@ -75,7 +74,7 @@ export class Interval<TArgs extends any[] = []> implements IInterval {
 
 	/** @inheritdoc */
 	get isActive() {
-		return this._isActive;
+		return !!this._handler.id;
 	}
 
 	/** @inheritdoc */
@@ -83,23 +82,13 @@ export class Interval<TArgs extends any[] = []> implements IInterval {
 		return this._delay;
 	}
 
-	private clean() {
-		if (this._intervalId) {
-			clearInterval(this._intervalId);
-			this._intervalId = null;
-		}
-	}
-
 	/** @inheritdoc */
 	pause() {
-		this._isActive = false;
-		this.clean();
+		this._handler.clear();
 	}
 
 	/** @inheritdoc */
 	resume() {
-		this._isActive = true;
-		this.clean();
-		this._intervalId = setInterval(this._cb, this._delay, ...this._args);
+		this._handler.set(this._cb, this._delay, ...this._args);
 	}
 }
