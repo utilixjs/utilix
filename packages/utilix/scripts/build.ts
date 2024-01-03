@@ -1,6 +1,6 @@
 import path from "path";
 import { execSync } from "child_process";
-import { emptyDir } from "fs-extra";
+import { emptyDir, remove } from "fs-extra";
 import { rollup, type RollupOptions, type RollupBuild } from 'rollup';
 import { dts } from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
@@ -114,4 +114,7 @@ function getIIFEConfig(input: string, outputFile: string): RollupOptions {
 await Promise.all(Object.entries(moduleInputs).map(([output, input]) => build(getIIFEConfig(input, output))));
 
 console.groupEnd();
+
+await remove(path.join(distDir, 'tsconfig.tsbuildinfo'));
+
 console.info("🚀 Build finished successfully");
