@@ -270,7 +270,7 @@ export class UDocExporter {
 				const prop = mNode as UModuleField;
 				prop.kind = 'field';
 				prop.readonly = tsutils.isModifierFlagSet(declaration, ts.ModifierFlags.Readonly);
-				prop.optional = !!declaration.questionToken;
+				this.serializeOptionalNode(prop, declaration);
 
 				members.properties.set(mNode.name, prop);
 				//members.properties[mNode.name] = prop;
@@ -325,7 +325,7 @@ export class UDocExporter {
 				const param = this.serializeSymbol(pSymbol) as UModuleParameter;
 				const declaration = pSymbol.valueDeclaration as ts.ParameterDeclaration;
 
-				param.optional = !!declaration.questionToken;
+				this.serializeOptionalNode(param, declaration);
 				param.default = declaration.initializer?.getText();
 				param.restParams = !!declaration.dotDotDotToken;
 
@@ -369,6 +369,16 @@ export class UDocExporter {
 		}
 
 		return param;
+	}
+
+	private serializeOptionalNode(node: UModuleNode & { optional: boolean; }, declaration: ts.ParameterDeclaration | ts.PropertyDeclaration | ts.PropertySignature) {
+		node.optional = !!declaration.questionToken;
+		if (!declaration.type?.getText().includes('undefined')) {
+			node.type = node.type.replace(' | undefined', '');
+			if (node.type.startsWith('(') && node.type.endsWith(')')) {
+				node.type = node.type.slice(1, -1);
+			}
+		}
 	}
 
 	private serializeSymbol(symbol: ts.Symbol): UModuleNode {
