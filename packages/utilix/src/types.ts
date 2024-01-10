@@ -7,6 +7,7 @@ export type Mutable<Type> = {
 
 export type Func<TResult = void, TArgs extends any[] = []> = (...args: TArgs) => TResult;
 export type Action<TArgs extends any[] = []> = Func<void, TArgs>;
+export type AnyFunc = Func<any, any[]>;
 
 export type ValueOrGetter<T> = T | Func<T>;
 export type Awaitable<T> = T | PromiseLike<T>;
