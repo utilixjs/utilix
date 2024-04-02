@@ -6,10 +6,9 @@ import './style.css';
 const theme: ThemeType = {
 	extends: DefaultTheme,
 	Layout: () => {
-		return h(DefaultTheme.Layout, null, {
-		});
+		return h(DefaultTheme.Layout, null, {});
 	},
-	enhanceApp({ app, router, siteData }) {
+	enhanceApp() {
 	}
 };
 

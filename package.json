@@ -1,9 +1,14 @@
 {
 	"name": "@utilix/monorepo",
 	"version": "0.0.0",
+	"license": "MIT",
+	"author": "",
+	"keywords": [],
+
 	"private": true,
-	"packageManager": "pnpm@8.15.3",
 	"type": "module",
+	"packageManager": "pnpm@8.15.3",
+
 	"scripts": {
 		"build": "pnpm -r run build",
 		"test": "vitest",
@@ -15,25 +20,23 @@
 		"docs:build": "vitepress build docs",
 		"docs:preview": "vitepress preview docs"
 	},
-	"keywords": [],
+
 	"devDependencies": {
 		"@tsconfig/node20": "^20.1.2",
 		"@types/eslint": "^8.56.2",
-		"@types/node": "20.11.18",
-		"@typescript-eslint/eslint-plugin": "^6.21.0",
-		"@typescript-eslint/parser": "^6.21.0",
+		"@types/eslint__js": "^8.42.3",
+		"@types/node": "^20.11.18",
 		"@vue/tsconfig": "^0.5.1",
 		"changelogithub": "^0.13.3",
-		"eslint": "^8.56.0",
+		"eslint": "^8.57.0",
 		"tsutils": "^3.21.0",
 		"typescript": "^5.3.3",
+		"typescript-eslint": "^7.4.0",
 		"vite": "^5.1.3",
 		"vite-plugin-inspect": "^0.8.3",
 		"vitepress": "1.0.0-rc.42",
 		"vitest": "^1.2.2",
 		"vue": "^3.4.19",
 		"vue-tsc": "^1.8.27"
-	},
-	"author": "",
-	"license": "MIT"
+	}
 }
