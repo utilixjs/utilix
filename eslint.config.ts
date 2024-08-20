@@ -1,7 +1,7 @@
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import tseslint, { type Config } from 'typescript-eslint';
 
-export default tseslint.config(
+const config: Config = tseslint.config(
 	{ ignores: ['node_modules', '**/dist', '**/cache', '**/*.local.*'] },
 
 	eslint.configs.recommended,
@@ -20,8 +20,8 @@ export default tseslint.config(
 	{
 		languageOptions: {
 			parserOptions: {
-				project: ['tsconfig.node.json', 'docs/tsconfig.json', 'packages/*/tsconfig.json'],
-				tsconfigRootDir: import.meta.dirname
+				project: ['packages/*/tsconfig.json', 'docs/tsconfig.json', 'tsconfig.node.json', 'tsconfig.json'],
+				tsconfigRootDir: __dirname // import.meta.dirname
 			}
 		}
 	},
@@ -34,11 +34,6 @@ export default tseslint.config(
 				'ts-nocheck': true,
 				'ts-check': false,
 				minimumDescriptionLength: 3
-			}],
-			'@typescript-eslint/ban-types': ['error', {
-				types: {
-					'Function': false
-				},
 			}],
 			'@typescript-eslint/consistent-type-definitions': 'off',
 			'@typescript-eslint/no-empty-function': 'off',
@@ -53,3 +48,5 @@ export default tseslint.config(
 		}
 	}
 );
+
+export default config;

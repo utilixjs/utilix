@@ -20,7 +20,7 @@
 		"packages/*/*.config.ts",
 		"changelogithub.config.ts",
 		"vitest.workspace.ts",
-		"eslint.config.js"
+		"eslint.config.*"
 	],
 	"references": [
 		{
