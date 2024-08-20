@@ -211,7 +211,7 @@ export class TimeSpan {
 	static parse(str: string) {
 		const num = Number(str);
 		if (Number.isNaN(num)) {
-			const match = str.match(REGEX_SPARSE) ?? str.match(REGEX_TPARSE);
+			const match = (REGEX_SPARSE.exec(str)) ?? (REGEX_TPARSE.exec(str));
 			if (match) {
 				const sign = (match[1] === '-') ? -1 : 1;
 				return new TimeSpan(

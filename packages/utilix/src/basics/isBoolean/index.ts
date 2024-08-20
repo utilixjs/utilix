@@ -14,7 +14,7 @@ export function isBoolean(value: unknown): value is boolean {
  * @param value The value to check.
  * @returns `true` if value is a boolean or `Boolean` object, otherwise `false`.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 export function isBooleanObject(value: unknown): value is boolean | Boolean {
 	return isBoolean(value) || (value instanceof Boolean);
 }
