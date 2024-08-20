@@ -53,7 +53,7 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 		},
 
 		transform(code, id) {
-			const match = id.match(UModulePathRegex);
+			const match = UModulePathRegex.exec(id);
 			if (match) {
 				return transform(code, match[1], id);
 			}

@@ -10,7 +10,7 @@ const NonNum = ['x', null, true, [1, 2, 3], { 'a': 1 }, Symbol(), new Date(), ne
 function expectAll(values: any[], checker: (val: any) => boolean, truthy: boolean) {
 	values.forEach(val => {
 		const assert = expect(checker(val));
-		truthy ? assert.toBeTruthy(): assert.toBeFalsy();
+		if (truthy) assert.toBeTruthy(); else assert.toBeFalsy();
 	});
 }
 

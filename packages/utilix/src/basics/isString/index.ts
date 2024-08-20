@@ -14,7 +14,7 @@ export function isString(value?: unknown): value is string {
  * @param value The value to check.
  * @returns `true` if value is a string or `String` object, otherwise `false`.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 export function isStringObject(value?: unknown): value is string | String {
 	return isString(value) || (value instanceof String);
 }
