@@ -53,21 +53,32 @@ export interface DebouncedFuncLeading<T extends AnyFunc> extends DebouncedFunc<T
 
 /**
  * Creates a debounced function that delays invoking func until after wait milliseconds have elapsed since
- * the last time the debounced function was invoked. The debounced function comes with a cancel method to
- * cancel delayed invocations and a flush method to immediately invoke them. Provide an options object to
- * indicate that func should be invoked on the leading and/or trailing edge of the wait timeout. Subsequent
- * calls to the debounced function return the result of the last func invocation.
- *
- * Note: If leading and trailing options are true, func is invoked on the trailing edge of the timeout only
- * if the the debounced function is invoked more than once during the wait timeout.
+ * the last time the debounced function was invoked.
  *
  * @param func The function to debounce.
  * @param timeout The number of milliseconds to delay.
- * @param options The options object.
  * @return Returns the new debounced function.
  */
 export function debounce<T extends AnyFunc>(func: T, timeout?: number): DebouncedFunc<T>;
+
+/**
+ * Creates a debounced function that delays invoking func until after wait milliseconds have elapsed since
+ * the last time the debounced function was invoked.
+ *
+ * @param func The function to debounce.
+ * @param options The options object.
+ * @return Returns the new debounced function.
+ */
 export function debounce<T extends AnyFunc>(func: T, options: DebounceOptions): DebouncedFunc<T>;
+
+/**
+ * Creates a debounced function that delays invoking func until after wait milliseconds have elapsed since
+ * the last time the debounced function was invoked.
+ *
+ * @param func The function to debounce.
+ * @param options The options object.
+ * @return Returns the new debounced function.
+ */
 export function debounce<T extends AnyFunc>(func: T, options: DebounceOptions & { leading: true; }): DebouncedFuncLeading<T>;
 export function debounce<T extends AnyFunc>(func: T, options: number | DebounceOptions = {}) {
 	if (isNumber(options))
