@@ -1,6 +1,7 @@
 import { h } from 'vue';
 import type { Theme as ThemeType } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
+import 'virtual:uno.css';
 import './style.css';
 
 const theme: ThemeType = {

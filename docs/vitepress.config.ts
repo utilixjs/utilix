@@ -1,4 +1,5 @@
 import { defineConfig, type DefaultTheme } from 'vitepress';
+import UnoCSS from 'unocss/vite';
 import Inspect from 'vite-plugin-inspect';
 import { docExporter, moduleDocTransform, UModulePathRegex } from './src/plugins';
 //import { modules } from '@scripts/modules';
@@ -34,6 +35,7 @@ export default defineConfig({
 	vite: {
 		publicDir: 'docs/public',
 		plugins: [
+			UnoCSS(),
 			Inspect(),
 			exporterPlugin,
 			transformPlugin,

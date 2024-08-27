@@ -35,6 +35,8 @@
 	--vp-c-default-3: #211f35;
 
 	--vp-c-brand-1: #ffda93;
+	--vp-c-brand-2: #9e7047;
+	--vp-c-brand-3: #835b39;
 }
 
 :root {
@@ -229,4 +231,38 @@ h3 .badge {
 .badge-get,
 .dark .badge-get {
 	--badge-color: 66 189 134;
+}
+
+.form-input {
+	@apply py-1.5 rounded-md b-solid b-[--vp-c-default-3] shadow-sm focus:border-[--vp-c-brand-2] focus:ring-1 focus:ring-[--vp-c-brand-2] bg-[--vp-c-bg];
+
+	&:disabled {
+		background-color: var(--vp-c-bg-soft);
+	}
+}
+
+.form-checkbox,
+.form-radio {
+	background-color: var(--vp-c-bg);
+	border-color: var(--vp-c-bg);
+	color: var(--vp-c-brand-2);
+
+	&:disabled, &:disabled:hover {
+		background-color: var(--vp-c-bg-soft);
+	}
+
+	&:checked {
+		@apply bg-[--vp-c-brand-2];
+		&:hover {
+			@apply bg-[--vp-c-brand-3];
+		}
+	}
+	&:focus {
+		@apply ring-offset-0 ring-[--vp-c-brand-2];
+	}
+
+}
+
+.form-checkbox {
+	@apply rounded;
 }

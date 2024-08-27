@@ -18,9 +18,8 @@
 	"include": [
 		"packages/*/scripts",
 		"packages/*/*.config.ts",
-		"changelogithub.config.ts",
+		"*.config.ts",
 		"vitest.workspace.ts",
-		"eslint.config.*"
 	],
 	"references": [
 		{
