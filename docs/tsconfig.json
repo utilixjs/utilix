@@ -16,7 +16,8 @@
 	"include": [
 		"src",
 		".vitepress/**/*",
-		"../packages/**/*.vue"
+		"../packages/**/*.vue",
+		"vitepress.config.ts"
 	],
 	"references": [
 		{

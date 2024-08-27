@@ -16,9 +16,9 @@
 		"typecheck": "pnpm tsc:build && tsc --noEmit --project tsconfig.node.json && vue-tsc --noEmit -p docs/tsconfig.json",
 		"lint": "pnpm tsc:build && eslint --flag unstable_ts_config --cache .",
 		"lint:fix": "pnpm tsc:build && pnpm lint --fix",
-		"docs:dev": "vitepress dev docs",
-		"docs:build": "vitepress build docs",
-		"docs:preview": "vitepress preview docs"
+		"docs:dev": "pnpm build && vitepress dev docs",
+		"docs:build": "pnpm build && vitepress build docs",
+		"docs:preview": "pnpm build && vitepress preview docs"
 	},
 
 	"devDependencies": {
