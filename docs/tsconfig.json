@@ -4,6 +4,7 @@
 		"types": ["node"],
 
 		"outDir": ".vitepress/dist",
+		"rootDir": "../",
 		"composite": true,
 
 		"paths": {
@@ -13,8 +14,9 @@
 		}
 	},
 	"include": [
-		"**/*",
-		".vitepress/**/*"
+		"src",
+		".vitepress/**/*",
+		"../packages/**/*.vue"
 	],
 	"references": [
 		{

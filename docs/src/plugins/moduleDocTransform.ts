@@ -15,21 +15,21 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 	let exporter: um.DocExporterPluginAPI;
 
 	function transform(code: string, module: string, watchModule?: string) {
-		let mainMd = '', usageMd = '', extMd = '';
+		let mainMd = '', subMd = '', extMd = '';
 
 		const codeIndex = code.indexOf('## ');
 		if (codeIndex >= 0) {
 			mainMd =  code.slice(0, codeIndex);
 			extMd = code.slice(codeIndex);
 
-			const usageIdx = extMd.indexOf("## Usage");
-			if (usageIdx >= 0) {
-				const usageLastIdx = extMd.indexOf("\n## ", usageIdx + 1);
-				if (usageLastIdx >= 0) {
-					usageMd = extMd.slice(0, usageLastIdx);
-					extMd = extMd.slice(usageLastIdx);
+			const subIdx = Math.max(extMd.indexOf("## Usage"), extMd.indexOf("## Demo"));
+			if (subIdx >= 0) {
+				const subLastIdx = extMd.indexOf("\n## ", subIdx + 1);
+				if (subLastIdx >= 0) {
+					subMd = extMd.slice(0, subLastIdx);
+					extMd = extMd.slice(subLastIdx);
 				} else {
-					usageMd = extMd;
+					subMd = extMd;
 					extMd = '';
 				}
 			}
@@ -38,7 +38,7 @@ export function moduleDocTransform(): Plugin<DocTransformPluginAPI> {
 		}
 
 		const md = mdExports(exporter.getExports(module, watchModule), module.slice(module.indexOf('/') + 1));
-		return mainMd + usageMd + md + extMd;
+		return mainMd + subMd + md + extMd;
 	}
 
 	return {
