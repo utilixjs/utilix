@@ -40,13 +40,13 @@
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^11.0.4",
-		"esbuild": "^0.23.1",
+		"esbuild": "^0.24.0",
 		"fs-extra": "^11.2.0",
-		"rollup": "^4.21.0",
+		"rollup": "^4.24.0",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-esbuild": "^6.1.1",
 		"rollup-plugin-tsconfig-paths": "^1.5.2",
-		"tsx": "^4.17.0",
-		"typescript": "^5.5.4"
+		"tsx": "^4.19.1",
+		"typescript": "^5.6.3"
 	}
 }
