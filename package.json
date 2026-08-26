@@ -25,7 +25,7 @@
 		"@tsconfig/node20": "^20.1.4",
 		"@types/eslint": "^9.6.0",
 		"@types/eslint__js": "^8.42.3",
-		"@types/node": "^20.16.1",
+		"@types/node": "^24.13.3",
 		"@vue/tsconfig": "^0.5.1",
 		"changelogithub": "^0.13.9",
 		"eslint": "^9.9.0",
